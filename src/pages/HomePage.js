@@ -1,14 +1,12 @@
 import React from "react";
-import HeroSection from "../components/HeroSection";
+import HeroSection from "../components/common/HeroSection";
 import Header from "../components/common/Header";
-import ProductShowcase from "../components/Productshowcase";
 
 const HomePage = () => {
   return (
     <>
       <Header />
       <HeroSection />
-      <ProductShowcase />
     </>
   );
 };

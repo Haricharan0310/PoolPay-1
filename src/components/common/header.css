@@ -1,0 +1,90 @@
+.header{
+    justify-content: space-between;
+    align-items: center;
+    padding: 60px 0px 40px;
+}
+
+.header-logo{
+    font-size: medium;
+    font-weight: 900;
+}
+
+.header-nav-item{
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0px 20px 0px 36px;
+}
+
+.mobile-menu-wrapper{
+    position: relative;
+}
+
+.mobile-menu{
+    position: fixed;
+    background-color: var(--bg-black);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    height: 100vh;
+    width: 100vw;
+    text-align: left;
+    padding: 32px;
+    top: 0px;
+    left: 0px;
+    transition: transform 0.3s ease-in-out 0s;
+    z-index: 1;
+}
+
+.overlay{
+    transform: translateX(0px);
+}
+
+.mobile-menu-button-wrapper{
+    z-index: 2;
+}
+
+.mobile-navbar{
+    margin-top: 95px;
+    overflow-y:scroll ;
+    width: 90%;
+}
+.mobile-nav-item{
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 15px;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: var(--bg-light-gray);
+}
+.mobile-nav-item,
+.header-nav-item,.header-logo {
+  color: #fff; /* Set the text color to white */
+  text-decoration: none; /* Remove the underline */
+  position: relative;
+}
+
+/* Add styles for visited links (if needed) */
+.mobile-nav-item:visited,
+.header-nav-item:visited ,
+.header-logo:visited {
+  color: #fff; /* Set the text color to white for visited links */
+}
+.mobile-nav-item::before,
+.header-nav-item::before {
+  content: ""; /* Add a pseudo-element to create the purple box */
+  position: absolute;
+  bottom: -5px; /* Adjust the distance from the text */
+  left: 0;
+  right: 0;
+  height: 5px; /* Set the height of the purple box */
+  background-color: #6a00ff; /* Set the background color to purple */
+  transform: scaleX(0); /* Initially, scale the box to zero width */
+  transform-origin: bottom left;
+  transition: transform 0.3s ease; /* Add a smooth transition effect */
+}
+
+.mobile-nav-item:hover::before,
+.header-nav-item:hover::before {
+  transform: scaleX(1); /* Expand the box to full width on hover */
+}

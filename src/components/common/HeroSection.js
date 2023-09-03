@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../common/button";
+import Button from "./Button";
 import "./herosection.css";
 
 const HeroSection = () => {
@@ -9,7 +9,7 @@ const HeroSection = () => {
         <div className="hero-heading">
           Share Moments,Share Costs, Request with Ease.
         </div>
-        <div className="hero-subheading">with POOLPAY</div>
+        <div className="hero-subheading"> with POOLPAY</div>
         <Button buttonText="Start Pooling" />
       </div>
     </div>
@@ -17,3 +17,4 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
+
