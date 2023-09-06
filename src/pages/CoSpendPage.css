@@ -1,39 +1,141 @@
+/* Container for the CoSpendPage */
 .co-spend-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 100vh; /* This ensures the page takes up the entire viewport height */
-  }
-  
-  .co-spend-buttons {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-  }
-  
-  .co-spend-button {
-    margin: 10px;
-    padding: 10px 20px;
-    background-color: #6A00FF;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .co-spend-welcome {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .pay-money-button {
-    background-color:#6A00FF;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100vh;
+  background-color: var(--bg-black); /* Updated background color to black */
+}
+
+/* Left side with buttons */
+.co-spend-buttons {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 20px;
+  background-color: var(--bg-black); /* Updated background color to black */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.co-spend-button {
+  margin: 10px 0;
+  padding: 12px 24px;
+  background-color: #6A00FF;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.co-spend-button:hover {
+  background-color: #4a0080;
+}
+
+.co-spend-buttons .selected {
+  background-color: #4a0080;
+}
+
+/* Right side with content */
+.co-spend-welcome {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 20px;
+  text-align: center;
+  max-height: 70vh; /* Adjust this value as needed */
+  overflow-y: auto; /* Enable vertical scrolling when content exceeds max-height */
+}
+
+.co-spend-welcome h1 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.contact-details {
+  margin-bottom: 20px;
+}
+
+.contact-details h2 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #6A00FF;
+}
+
+.contact-details p {
+  font-size: 16px;
+  color: #333;
+}
+
+/* Styling for pay money button */
+.pay-money-button {
+  background-color: #6A00FF;
+  color: #fff;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.pay-money-button:hover {
+  background-color: #4a0080;
+}
+
+/* Styling for the "Pay by Phone Number" section */
+.pay-by-phone {
+  text-align: left;
+}
+
+.pay-by-phone label {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.pay-by-phone input[type="text"],
+.pay-by-phone input[type="number"] {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.pay-by-phone .add-users-button {
+  background-color: #6A00FF;
+  color: #fff;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.pay-by-phone .add-users-button:hover {
+  background-color: #4a0080;
+}
+
+.user-input-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.user-input {
+  flex: 1;
+  margin-right: 10px;
+}
+
+
