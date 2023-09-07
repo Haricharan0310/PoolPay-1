@@ -29,4 +29,71 @@
     justify-content: center;
     align-items: center;
   }
-  
+  /* CoLoanPage.css */
+
+/* Container for the entire CoLoanPage */
+.co-loan-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #080707;
+  min-height: 100vh;
+}
+
+/* Welcome message and "Request Loan" button */
+.co-loan-welcome {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* "Request Loan" button */
+.co-loan-welcome button {
+  background-color: #6A00FF;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.co-loan-welcome button:hover {
+  background-color: #4B0082;
+}
+
+/* Loan request cards */
+.co-loan-dashboard {
+  display: flex;
+  flex-wrap: wrap; /* Allow cards to wrap to the next row */
+  justify-content: center;
+}
+
+/* Individual loan card */
+.loan-card {
+  width: 300px;
+  background-color: #0e0d0d;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 10px;
+}
+
+/* Card content */
+.card-content {
+  flex-grow: 1;
+}
+
+/* Loan button */
+.loan-card button {
+  margin-top: 10px;
+  background-color: #6A00FF;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.loan-card button:hover {
+  background-color: #4B0082;
+}
