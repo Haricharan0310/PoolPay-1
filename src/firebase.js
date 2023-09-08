@@ -10,7 +10,7 @@ const firebaseConfig = {
   projectId: "poolpay-c3abf",
   storageBucket: "poolpay-c3abf.appspot.com",
   messagingSenderId: "346592004812",
-  appId: "1:346592004812:web:cb8fc9333a598aee105069"
+  appId: "1:346592004812:web:cb8fc9333a598aee105069",
 };
 
 // Initialize Firebase

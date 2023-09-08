@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "./CoSpendPage.css";
+import { decodeQRCode } from "./qrCodeUtils";
 
 const CoSpendPage = () => {
+  const [currentStep, setCurrentStep] = useState(1);
   const [showScanner, setShowScanner] = useState(false);
+  const [uploadedQRCodeImage, setUploadedQRCodeImage] = useState(null);
+  const [scannedPhoneNumber, setScannedPhoneNumber] = useState("");
   const [showPayByPhoneNumber, setShowPayByPhoneNumber] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
   const [totalAmount, setTotalAmount] = useState(0);
@@ -16,6 +20,156 @@ const CoSpendPage = () => {
     const sum = users.reduce((acc, user) => acc + parseFloat(user.amount), 0);
     setTotalUserAmount(sum);
   }, [users]);
+
+  const handleUploadQRCode = (file) => {
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const dataURL = event.target.result;
+        setUploadedQRCodeImage(dataURL);
+        setScannedPhoneNumber(""); // Clear previously scanned phone number
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleScanQRCode = async () => {
+    if (uploadedQRCodeImage) {
+      try {
+        const phoneNumber = await decodeQRCode(uploadedQRCodeImage);
+
+        if (phoneNumber) {
+          setScannedPhoneNumber(phoneNumber);
+        } else {
+          alert("Failed to decode QR code. Please try again.");
+        }
+      } catch (error) {
+        console.error("Error decoding QR code:", error);
+        alert("An error occurred while decoding the QR code.");
+      }
+    } else {
+      alert("Please upload a QR code image first.");
+    }
+  };
+  const handleNextStep = () => {
+    setCurrentStep((prevStep) => prevStep + 1);
+  };
+
+  const handlePrevStep = () => {
+    setCurrentStep((prevStep) => prevStep - 1);
+  };
+
+  const renderPayByPhoneStep = () => {
+    switch (currentStep) {
+      case 1:
+        return (
+          <div>
+            <label>Enter Phone Number to Send Money To:</label>
+            <input
+              type="text"
+              placeholder="Phone Number"
+              value={phoneNumberToPay}
+              onChange={handlePhoneNumberInputChange}
+            />
+            <button onClick={handleNextStep}>Next</button>
+          </div>
+        );
+      case 2:
+        return (
+          <div>
+            <label>Enter Total Amount (₹):</label>
+            <input
+              type="number"
+              placeholder="Total Amount"
+              value={totalAmount}
+              onChange={handleTotalAmountInputChange}
+            />
+            <button onClick={handleNextStep}>Next</button>
+          </div>
+        );
+      case 3:
+        return (
+          <div>
+            <label>Number of Users Pooling Money:</label>
+            <input
+              type="number"
+              placeholder="Number of Users"
+              value={numUsersPooling}
+              onChange={handleNumUsersPoolingChange}
+            />
+            <button onClick={handleNextStep}>Next</button>
+          </div>
+        );
+      case 4:
+        return (
+          <div>
+            {/* Render user input fields here */}
+            {users.map((user, index) => (
+              <div key={index} className="user-input-row">
+                <div className="user-input">
+                  <input
+                    type="text"
+                    placeholder={`User ${index + 1} Name`}
+                    value={user.name}
+                    onChange={(e) =>
+                      handleUserInputChange(index, "name", e.target.value)
+                    }
+                  />
+                </div>
+                <div className="user-input">
+                  <input
+                    type="text"
+                    placeholder={`User ${index + 1} Phone Number`}
+                    value={user.phoneNumber}
+                    onChange={(e) =>
+                      handleUserInputChange(
+                        index,
+                        "phoneNumber",
+                        e.target.value
+                      )
+                    }
+                  />
+                </div>
+                <div className="user-input">
+                  <input
+                    type="number"
+                    placeholder={`Amount (₹)`}
+                    value={user.amount}
+                    onChange={(e) =>
+                      handleUserInputChange(index, "amount", e.target.value)
+                    }
+                  />
+                </div>
+              </div>
+            ))}
+            <button className="add-users-button" onClick={handleAddUserClick}>
+              Add Users
+            </button>
+            <button onClick={handlePrevStep}>Previous</button>
+            <button onClick={handleNextStep}>Next</button>
+          </div>
+        );
+      case 5:
+        return (
+          <div>
+            <p>Total Amount Needed to be Paid (₹): ₹{totalAmount.toFixed(2)}</p>
+            <p>
+              Total Amount Entered by Users (₹): ₹{totalUserAmount.toFixed(2)}
+            </p>
+            <p>
+              Amount Remaining (₹): ₹
+              {(totalAmount - totalUserAmount).toFixed(2)}
+            </p>
+            <button className="pay-money-button" onClick={handlePayMoneyClick}>
+              Pay Money
+            </button>
+            <button onClick={handlePrevStep}>Previous</button>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
 
   const handleScanAndPayClick = () => {
     setShowScanner(true);
@@ -47,16 +201,6 @@ const CoSpendPage = () => {
         "Please ensure the total amount and user amounts match before proceeding with payment."
       );
     }
-  };
-
-  const handleScannerComplete = (qrData) => {
-    // Parse QR code data, assuming it contains information about totalAmount and userAmount
-    const { totalAmount, userAmount } = JSON.parse(qrData);
-
-    setShowScanner(false);
-    setShowPayByPhoneNumber(true);
-    setTotalAmount(totalAmount);
-    setUsers([]);
   };
 
   const handleAddUserClick = () => {
@@ -119,111 +263,28 @@ const CoSpendPage = () => {
       <div className="co-spend-welcome">
         {showScanner ? (
           <div className="scanner">
-            {
-              <div className="scanner">
-                {/* Add your QR code scanner component here */}
-                {/* When the scan is complete, call handleScannerComplete with the QR data */}
-                {/* For demonstration purposes, you can use a simple input field */}
-                <input
-                  type="text"
-                  placeholder="Enter QR Code Data"
-                  onChange={(e) => handleScannerComplete(e.target.value)}
-                />
-              </div>
-            }
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleUploadQRCode(e.target.files[0])}
+            />
+            {uploadedQRCodeImage ? (
+              <>
+                <img src={uploadedQRCodeImage} alt="Uploaded QR Code" />
+                <button onClick={handleScanQRCode}>Scan QR Code</button>
+                {scannedPhoneNumber && (
+                  <div>
+                    <label>Scanned Phone Number:</label>
+                    <input type="text" value={scannedPhoneNumber} readOnly />
+                  </div>
+                )}
+              </>
+            ) : (
+              <p>Upload a QR code image to scan</p>
+            )}
           </div>
         ) : showPayByPhoneNumber ? (
-          <div className="pay-by-phone">
-            <>
-              <label>Enter Phone Number to Send Money To:</label>
-              <input
-                type="text"
-                placeholder="Phone Number"
-                value={phoneNumberToPay}
-                onChange={handlePhoneNumberInputChange}
-              />
-              <label>Enter Total Amount (₹):</label>
-              <input
-                type="number"
-                placeholder="Total Amount"
-                value={totalAmount}
-                onChange={handleTotalAmountInputChange}
-              />
-              <label>Number of Users Pooling Money:</label>
-              <input
-                type="number"
-                placeholder="Number of Users"
-                value={numUsersPooling}
-                onChange={handleNumUsersPoolingChange}
-              />
-              <button className="add-users-button" onClick={handleAddUserClick}>
-                Add Users
-              </button>
-              {users.length > 0 && (
-                <div>
-                  <h3>Enter User Details:</h3>
-                  {users.map((user, index) => (
-                    <div key={index} className="user-input-row">
-                      <div className="user-input">
-                        <input
-                          type="text"
-                          placeholder={`User ${index + 1} Name`}
-                          value={user.name}
-                          onChange={(e) =>
-                            handleUserInputChange(index, "name", e.target.value)
-                          }
-                        />
-                      </div>
-                      <div className="user-input">
-                        <input
-                          type="text"
-                          placeholder={`User ${index + 1} Phone Number`}
-                          value={user.phoneNumber}
-                          onChange={(e) =>
-                            handleUserInputChange(
-                              index,
-                              "phoneNumber",
-                              e.target.value
-                            )
-                          }
-                        />
-                      </div>
-                      <div className="user-input">
-                        <input
-                          type="number"
-                          placeholder={`Amount (₹)`}
-                          value={user.amount}
-                          onChange={(e) =>
-                            handleUserInputChange(
-                              index,
-                              "amount",
-                              e.target.value
-                            )
-                          }
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-              <p>
-                Total Amount Needed to be Paid (₹): ₹{totalAmount.toFixed(2)}
-              </p>
-              <p>
-                Total Amount Entered by Users (₹): ₹{totalUserAmount.toFixed(2)}
-              </p>
-              <p>
-                Amount Remaining (₹): ₹
-                {(totalAmount - totalUserAmount).toFixed(2)}
-              </p>
-              <button
-                className="pay-money-button"
-                onClick={handlePayMoneyClick}
-              >
-                Pay Money
-              </button>
-            </>
-          </div>
+          <div className="pay-by-phone">{renderPayByPhoneStep()}</div>
         ) : selectedContact ? (
           <>
             <div className="contact-details">
