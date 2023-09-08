@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./CoSpendPage.css";
+import { decodeQRCode } from "./qrCodeUtils";
 
 const CoSpendPage = () => {
   const [showScanner, setShowScanner] = useState(false);
+  const [uploadedQRCodeImage, setUploadedQRCodeImage] = useState(null);
+  const [scannedPhoneNumber, setScannedPhoneNumber] = useState("");
   const [showPayByPhoneNumber, setShowPayByPhoneNumber] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
   const [totalAmount, setTotalAmount] = useState(0);
@@ -16,6 +19,37 @@ const CoSpendPage = () => {
     const sum = users.reduce((acc, user) => acc + parseFloat(user.amount), 0);
     setTotalUserAmount(sum);
   }, [users]);
+
+  const handleUploadQRCode = (file) => {
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const dataURL = event.target.result;
+        setUploadedQRCodeImage(dataURL);
+        setScannedPhoneNumber(""); // Clear previously scanned phone number
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleScanQRCode = async () => {
+    if (uploadedQRCodeImage) {
+      try {
+        const phoneNumber = await decodeQRCode(uploadedQRCodeImage);
+
+        if (phoneNumber) {
+          setScannedPhoneNumber(phoneNumber);
+        } else {
+          alert("Failed to decode QR code. Please try again.");
+        }
+      } catch (error) {
+        console.error("Error decoding QR code:", error);
+        alert("An error occurred while decoding the QR code.");
+      }
+    } else {
+      alert("Please upload a QR code image first.");
+    }
+  };
 
   const handleScanAndPayClick = () => {
     setShowScanner(true);
@@ -47,16 +81,6 @@ const CoSpendPage = () => {
         "Please ensure the total amount and user amounts match before proceeding with payment."
       );
     }
-  };
-
-  const handleScannerComplete = (qrData) => {
-    // Parse QR code data, assuming it contains information about totalAmount and userAmount
-    const { totalAmount, userAmount } = JSON.parse(qrData);
-
-    setShowScanner(false);
-    setShowPayByPhoneNumber(true);
-    setTotalAmount(totalAmount);
-    setUsers([]);
   };
 
   const handleAddUserClick = () => {
@@ -119,18 +143,25 @@ const CoSpendPage = () => {
       <div className="co-spend-welcome">
         {showScanner ? (
           <div className="scanner">
-            {
-              <div className="scanner">
-                {/* Add your QR code scanner component here */}
-                {/* When the scan is complete, call handleScannerComplete with the QR data */}
-                {/* For demonstration purposes, you can use a simple input field */}
-                <input
-                  type="text"
-                  placeholder="Enter QR Code Data"
-                  onChange={(e) => handleScannerComplete(e.target.value)}
-                />
-              </div>
-            }
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleUploadQRCode(e.target.files[0])}
+            />
+            {uploadedQRCodeImage ? (
+              <>
+                <img src={uploadedQRCodeImage} alt="Uploaded QR Code" />
+                <button onClick={handleScanQRCode}>Scan QR Code</button>
+                {scannedPhoneNumber && (
+                  <div>
+                    <label>Scanned Phone Number:</label>
+                    <input type="text" value={scannedPhoneNumber} readOnly />
+                  </div>
+                )}
+              </>
+            ) : (
+              <p>Upload a QR code image to scan</p>
+            )}
           </div>
         ) : showPayByPhoneNumber ? (
           <div className="pay-by-phone">
