@@ -17,6 +17,7 @@ import Modal from 'react-modal';
 import Login from "./Login";
 import app from "../firebase";
 import "./CoLoanPage.css"; // Import your CSS file for styling
+import parsePhoneNumber from 'libphonenumber-js';
 
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -31,6 +32,8 @@ const CoLoanPage = () => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [totalUserAmount, setTotalUserAmount] = useState(0);
   const [users, setUsers] = useState([]);
+  const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(false);
+  const [currentStep, setCurrentStep] = useState(1);
   const customStyles = {
     content: {
       top: "50%",
@@ -86,27 +89,8 @@ const CoLoanPage = () => {
     setShowLoanForm(false);
   };
 
-  const handleTotalAmountInputChange = (e) => {
-    setTotalAmount(parseFloat(e.target.value));
-  };
-
-  const handleNumUsersPoolingChange = (e) => {
-    const numUsers = parseInt(e.target.value);
-    setNumUsersPooling(numUsers);
-  };
-
-  const handleAddUserClick = () => {
-    if (numUsersPooling > 0) {
-      setUsers(
-        Array.from({ length: numUsersPooling }, () => ({
-          name: "",
-          phoneNumber: "",
-          amount: "0",
-        }))
-      ); // Initialize amount as "0"
-    }
-  };
-
+ 
+  
   const handleLoanFormSubmit = async (loanRequest) => {
     try {
       // Add the loan request to Firestore
@@ -120,9 +104,7 @@ const CoLoanPage = () => {
     }
   };
 
-  const handlePhoneNumberInputChange = (e) => {
-    setPhoneNumberToPay(e.target.value);
-  };
+ 
 
   const handleLoanButtonClick = (loanRequest) => {
     // Placeholder: Display a success message for the loan
@@ -134,12 +116,7 @@ const CoLoanPage = () => {
     signOut(auth);
   };
 
-  const handleUserInputChange = (index, field, value) => {
-    // Update the user object with the new value at the specified index
-    const updatedUsers = [...users];
-    updatedUsers[index][field] = value;
-    setUsers(updatedUsers);
-  };
+  
 
   const handlePayMoneyClick = () => {
     // Check if the total amount and totalUserAmount match before proceeding with payment
@@ -153,6 +130,176 @@ const CoLoanPage = () => {
         "Please ensure the total amount and user amounts match before proceeding with payment."
       );
     }
+  };
+  const validatePhoneNumber = (phoneNumber) => {
+    try {
+      const parsedPhoneNumber = parsePhoneNumber(phoneNumber);
+      const isValid = parsedPhoneNumber.isValid();
+      return isValid;
+    } catch (error) {
+      return false;
+    }
+  };
+  
+  
+  const handleNextStep = () => {
+    setCurrentStep((prevStep) => prevStep + 1);
+  };
+
+  const handlePrevStep = () => {
+    setCurrentStep((prevStep) => prevStep - 1);
+  };
+
+  const renderPayByPhoneStep = () => {
+    switch (currentStep) {
+      case 1:
+        return (
+          <div>
+            <label>Enter Phone Number to Send Money To:</label>
+            <input
+              type="text"
+              placeholder="Phone Number"
+              value={phoneNumberToPay}
+              onChange={handlePhoneNumberInputChange}
+            />
+            <button onClick={handleNextStep} disabled={!isPhoneNumberValid}>Next</button>
+          </div>
+        );
+      case 2:
+        return (
+          <div>
+            <label>Enter Total Amount (₹):</label>
+            <input
+              type="number"
+              placeholder="Total Amount"
+              value={totalAmount}
+              onChange={handleTotalAmountInputChange}
+            />
+            <button onClick={handleNextStep}>Next</button>
+          </div>
+        );
+      case 3:
+        return (
+          <div>
+            <label>Number of Users Pooling Money:</label>
+            <input
+              type="number"
+              placeholder="Number of Users"
+              value={numUsersPooling}
+              onChange={handleNumUsersPoolingChange}
+            />
+            <button onClick={handleNextStep}>Next</button>
+          </div>
+        );
+      case 4:
+        return (
+          <div>
+            {/* Render user input fields here */}
+            {users.map((user, index) => (
+              <div key={index} className="user-input-row">
+                <div className="user-input">
+                  <input
+                    type="text"
+                    placeholder={`User ${index + 1} Name`}
+                    value={user.name}
+                    onChange={(e) =>
+                      handleUserInputChange(index, "name", e.target.value)
+                    }
+                  />
+                </div>
+                <div className="user-input">
+                  <input
+                    type="text"
+                    placeholder={`User ${index + 1} Phone Number`}
+                    value={user.phoneNumber}
+                    onChange={(e) =>
+                      handleUserInputChange(
+                        index,
+                        "phoneNumber",
+                        e.target.value
+                      )
+                    }
+                  />
+                </div>
+                <div className="user-input">
+                  <input
+                    type="number"
+                    placeholder={`Amount (₹)`}
+                    value={user.amount}
+                    onChange={(e) =>
+                      handleUserInputChange(index, "amount", e.target.value)
+                    }
+                  />
+                </div>
+              </div>
+            ))}
+            <button className="add-users-button" onClick={handleAddUserClick}>
+              Add Users
+            </button>
+            <button onClick={handlePrevStep}>Previous</button>
+            <button onClick={handleNextStep}>Next</button>
+          </div>
+        );
+      case 5:
+        return (
+          <div>
+            <p>Total Amount Needed to be Paid (₹): ₹{totalAmount.toFixed(2)}</p>
+            <p>
+              Total Amount Entered by Users (₹): ₹{totalUserAmount.toFixed(2)}
+            </p>
+            <p>
+              Amount Remaining (₹): ₹
+              {(totalAmount - totalUserAmount).toFixed(2)}
+            </p>
+            <button className="pay-money-button" onClick={handlePayMoneyClick}>
+              Pay Money
+            </button>
+            <button onClick={handlePrevStep}>Previous</button>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+  const handleAddUserClick = () => {
+    if (numUsersPooling > 0) {
+      setUsers(
+        Array.from({ length: numUsersPooling }, () => ({
+          name: "",
+          phoneNumber: "",
+          amount: "0",
+        }))
+      ); // Initialize amount as "0"
+    }
+  };
+
+  const handlePhoneNumberInputChange = (e) => {
+    const newPhoneNumber = e.target.value;
+  const isValid = validatePhoneNumber(newPhoneNumber);
+  setPhoneNumberToPay(newPhoneNumber); // Update the phone number state
+  setIsPhoneNumberValid(isValid);
+
+  };
+  
+
+  const handleTotalAmountInputChange = (e) => {
+    setTotalAmount(parseFloat(e.target.value));
+  };
+
+  const handleNumUsersPoolingChange = (e) => {
+    const numUsers = parseInt(e.target.value);
+    setNumUsersPooling(numUsers);
+
+    // Clear the existing user data when the number of users changes
+    setUsers([]);
+    setTotalUserAmount(0);
+  };
+
+  const handleUserInputChange = (index, field, value) => {
+    // Update the user object with the new value at the specified index
+    const updatedUsers = [...users];
+    updatedUsers[index][field] = value;
+    setUsers(updatedUsers);
   };
 
   return (
@@ -194,97 +341,7 @@ const CoLoanPage = () => {
           onRequestClose={() => setShowAmountForm(false)}
           style={customStyles}
         >
-          <div className="pay-by-phone">
-            <>
-              <label>Enter Phone Number to Send Money To:</label>
-              <input
-                type="text"
-                placeholder="Phone Number"
-                value={phoneNumberToPay}
-                onChange={handlePhoneNumberInputChange}
-              />
-              <label>Enter Total Amount (₹):</label>
-              <input
-                type="number"
-                placeholder="Total Amount"
-                value={totalAmount}
-                onChange={handleTotalAmountInputChange}
-              />
-              <label>Number of Users Pooling Money:</label>
-              <input
-                type="number"
-                placeholder="Number of Users"
-                value={numUsersPooling}
-                onChange={handleNumUsersPoolingChange}
-              />
-              <button className="add-users-button" onClick={handleAddUserClick}>
-                Add Users
-              </button>
-              {users.length > 0 && (
-                <div>
-                  <h3>Enter User Details:</h3>
-                  {users.map((user, index) => (
-                    <div key={index} className="user-input-row">
-                      <div className="user-input">
-                        <input
-                          type="text"
-                          placeholder={`User ${index + 1} Name`}
-                          value={user.name}
-                          onChange={(e) =>
-                            handleUserInputChange(index, "name", e.target.value)
-                          }
-                        />
-                      </div>
-                      <div className="user-input">
-                        <input
-                          type="text"
-                          placeholder={`User ${index + 1} Phone Number`}
-                          value={user.phoneNumber}
-                          onChange={(e) =>
-                            handleUserInputChange(
-                              index,
-                              "phoneNumber",
-                              e.target.value
-                            )
-                          }
-                        />
-                      </div>
-                      <div className="user-input">
-                        <input
-                          type="number"
-                          placeholder={`Amount (₹)`}
-                          value={user.amount}
-                          onChange={(e) =>
-                            handleUserInputChange(
-                              index,
-                              "amount",
-                              e.target.value
-                            )
-                          }
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-              <p>
-                Total Amount Needed to be Paid (₹): ₹{totalAmount.toFixed(2)}
-              </p>
-              <p>
-                Total Amount Entered by Users (₹): ₹{totalUserAmount.toFixed(2)}
-              </p>
-              <p>
-                Amount Remaining (₹): ₹
-                {(totalAmount - totalUserAmount).toFixed(2)}
-              </p>
-              <button
-                className="pay-money-button"
-                onClick={handlePayMoneyClick}
-              >
-                Pay Money
-              </button>
-            </>
-          </div>
+          <div className="pay-by-phone">{renderPayByPhoneStep()}</div>
   
           <button onClick={() => setShowAmountForm(false)}>Close</button>
         </Modal>

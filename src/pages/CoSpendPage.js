@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./CoSpendPage.css";
+import parsePhoneNumber from 'libphonenumber-js';
+
+
 import { decodeQRCode } from "./qrCodeUtils";
 
 const CoSpendPage = () => {
@@ -14,6 +17,10 @@ const CoSpendPage = () => {
   const [phoneNumberToPay, setPhoneNumberToPay] = useState("");
   const [numUsersPooling, setNumUsersPooling] = useState(0);
   const [totalUserAmount, setTotalUserAmount] = useState(0);
+  const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(false);
+
+  
+
 
   useEffect(() => {
     // Calculate the totalUserAmount (sum of userAmounts)
@@ -51,6 +58,17 @@ const CoSpendPage = () => {
       alert("Please upload a QR code image first.");
     }
   };
+  const validatePhoneNumber = (phoneNumber) => {
+    try {
+      const parsedPhoneNumber = parsePhoneNumber(phoneNumber);
+      const isValid = parsedPhoneNumber.isValid();
+      return isValid;
+    } catch (error) {
+      return false;
+    }
+  };
+  
+  
   const handleNextStep = () => {
     setCurrentStep((prevStep) => prevStep + 1);
   };
@@ -71,7 +89,7 @@ const CoSpendPage = () => {
               value={phoneNumberToPay}
               onChange={handlePhoneNumberInputChange}
             />
-            <button onClick={handleNextStep}>Next</button>
+            <button onClick={handleNextStep} disabled={!isPhoneNumberValid}>Next</button>
           </div>
         );
       case 2:
@@ -216,8 +234,13 @@ const CoSpendPage = () => {
   };
 
   const handlePhoneNumberInputChange = (e) => {
-    setPhoneNumberToPay(e.target.value);
+    const newPhoneNumber = e.target.value;
+  const isValid = validatePhoneNumber(newPhoneNumber);
+  setPhoneNumberToPay(newPhoneNumber); // Update the phone number state
+  setIsPhoneNumberValid(isValid);
+
   };
+  
 
   const handleTotalAmountInputChange = (e) => {
     setTotalAmount(parseFloat(e.target.value));
