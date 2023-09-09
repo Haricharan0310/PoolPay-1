@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./CoSpendPage.css";
-import parsePhoneNumber from 'libphonenumber-js';
+import parsePhoneNumber from "libphonenumber-js";
 
 import { decodeQRCode } from "./qrCodeUtils";
 
-
-import { Html5QrcodeScanner } from 'html5-qrcode';
+import { Html5QrcodeScanner } from "html5-qrcode";
 import { useRef } from "react";
 
 const qrcodeRegionId = "html5qr-code-full-region";
@@ -39,23 +38,29 @@ const Html5QrcodePlugin = (props) => {
     if (!props.qrCodeSuccessCallback) {
       throw new Error("qrCodeSuccessCallback is a required callback.");
     }
-    const html5QrcodeScanner = new Html5QrcodeScanner(qrcodeRegionId, config, verbose);
+    const html5QrcodeScanner = new Html5QrcodeScanner(
+      qrcodeRegionId,
+      config,
+      verbose
+    );
     html5QrcodeScannerRef.current = html5QrcodeScanner;
-    html5QrcodeScanner.render(props.qrCodeSuccessCallback, props.qrCodeErrorCallback);
+    html5QrcodeScanner.render(
+      props.qrCodeSuccessCallback,
+      props.qrCodeErrorCallback
+    );
 
     // cleanup function when component will unmount
     return () => {
-      html5QrcodeScannerRef.current.clear().catch(error => {
+      html5QrcodeScannerRef.current.clear().catch((error) => {
         console.error("Failed to clear html5QrcodeScanner. ", error);
       });
     };
   }, []);
 
-  return (
-    <div id={qrcodeRegionId} />
-  );
+  return <div id={qrcodeRegionId} />;
 };
 const CoSpendPage = () => {
+  const [showGroupImage, setShowGroupImage] = useState(true);
   const [currentStep, setCurrentStep] = useState(1);
   const [currentScanStep, setScanStep] = useState(0);
   const [showScanner, setShowScanner] = useState(false);
@@ -70,9 +75,7 @@ const CoSpendPage = () => {
   const [totalUserAmount, setTotalUserAmount] = useState(0);
   const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(false);
 
-
   const [decodedResults, setDecodedResults] = useState(null);
-
 
   useEffect(() => {
     // Calculate the totalUserAmount (sum of userAmounts)
@@ -92,8 +95,12 @@ const CoSpendPage = () => {
     }
   };
 
-  function scanNextStepHandler() { setScanStep(currentScanStep + 1) }
-  function scanPrevStepHandler() { setScanStep(currentScanStep - 1) }
+  function scanNextStepHandler() {
+    setScanStep(currentScanStep + 1);
+  }
+  function scanPrevStepHandler() {
+    setScanStep(currentScanStep - 1);
+  }
 
   const handleScanQRCode = async () => {
     if (uploadedQRCodeImage) {
@@ -123,7 +130,6 @@ const CoSpendPage = () => {
     }
   };
 
-
   const handleNextStep = () => {
     setCurrentStep((prevStep) => prevStep + 1);
   };
@@ -152,7 +158,9 @@ const CoSpendPage = () => {
               value={phoneNumberToPay}
               onChange={handlePhoneNumberInputChange}
             />
-            <button onClick={handleNextStep} disabled={!isPhoneNumberValid}>Next</button>
+            <button onClick={handleNextStep} disabled={!isPhoneNumberValid}>
+              Next
+            </button>
           </div>
         );
       case 2:
@@ -264,7 +272,12 @@ const CoSpendPage = () => {
                 value={phoneNumberToPay}
                 onChange={handlePhoneNumberInputChange}
               />
-              <button onClick={scanNextStepHandler} disabled={!isPhoneNumberValid}>Next</button>
+              <button
+                onClick={scanNextStepHandler}
+                disabled={!isPhoneNumberValid}
+              >
+                Next
+              </button>
             </div>
           </div>
         );
@@ -371,6 +384,9 @@ const CoSpendPage = () => {
     setSelectedContact(null);
     setTotalAmount(0);
     setUsers([]);
+
+    // Add this to hide the Group32.png image when the button is clicked
+    setShowGroupImage(false);
   };
 
   const handlePayByPhoneNumberClick = () => {
@@ -407,7 +423,6 @@ const CoSpendPage = () => {
         }))
       ); // Initialize amount as "0"
     }
-
   };
 
   const handlePhoneNumberInputChange = (e) => {
@@ -415,9 +430,7 @@ const CoSpendPage = () => {
     const isValid = validatePhoneNumber(newPhoneNumber);
     setPhoneNumberToPay(newPhoneNumber); // Update the phone number state
     setIsPhoneNumberValid(isValid);
-
   };
-
 
   const handleTotalAmountInputChange = (e) => {
     setTotalAmount(parseFloat(e.target.value));
@@ -449,91 +462,83 @@ const CoSpendPage = () => {
       {/* Left Side */}
       <div className="co-spend-buttons">
         <button className="co-spend-button" onClick={handleScanAndPayClick}>
-          Scan and Pay
+          <div>
+            <img src="./images/Qrcode.svg" />
+          </div>{" "}
+          Scan & Pay
         </button>
+
         <button
           className="co-spend-button"
           onClick={handlePayByPhoneNumberClick}
         >
+          <div>
+            <img src="./images/Phone call.svg" />
+          </div>{" "}
           Pay by Phone Number
         </button>
       </div>
 
       {/* Right Side */}
       <div className="co-spend-welcome">
-        {
+        {showGroupImage && ( // Conditionally render the Group32.png image
+          <img src="./images/Group32.png" alt="Group Image" />
+        )}
+        {showScanner ? (
+          currentScanStep == 0 ? (
+            <div className="scanner">
+              <Html5QrcodePlugin
+                fps={10}
+                qrbox={250}
+                disableFlip={false}
+                qrCodeSuccessCallback={onNewScanResult}
+              />
 
+              {decodedResults && (
+                <button onClick={() => scanNextStepHandler()}>Next</button>
+              )}
 
-
-          showScanner ?
-
-
-
-            (
-
-              currentScanStep == 0 ?
-                <div className="scanner">
-                  <Html5QrcodePlugin
-                    fps={10}
-                    qrbox={250}
-                    disableFlip={false}
-                    qrCodeSuccessCallback={onNewScanResult}
-                  />
-
-                  {
-                    decodedResults && <button onClick={() => scanNextStepHandler()} >
-                      Next
-                    </button>
-                  }
-
-                  {/* <input
+              {/* <input
               type="file"
               accept="image/*"
               onChange={(e) => handleUploadQRCode(e.target.files[0])}
             /> */}
-                  {uploadedQRCodeImage ? (
-                    <>
-                      <img src={uploadedQRCodeImage} alt="Uploaded QR Code" />
-                      <button onClick={handleScanQRCode}>Scan QR Code</button>
-                      {scannedPhoneNumber && (
-                        <div>
-                          <label>Scanned Phone Number:</label>
-                          <input type="text" value={scannedPhoneNumber} readOnly />
-                        </div>
-
-
-                      )}
-                    </>
-                  ) : (
-                    <>
-
-                      <p>Scan or Upload a QR code image to scan</p>
-                    </>
-                  )}
-                </div> :
+              {uploadedQRCodeImage ? (
                 <>
-                  {
-
-                    renderPayByScanStep()
-
-                  }
+                  <img src={uploadedQRCodeImage} alt="Uploaded QR Code" />
+                  <button onClick={handleScanQRCode}>Scan QR Code</button>
+                  {scannedPhoneNumber && (
+                    <div>
+                      <label>Scanned Phone Number:</label>
+                      <input type="text" value={scannedPhoneNumber} readOnly />
+                    </div>
+                  )}
                 </>
-            ) : showPayByPhoneNumber ? (
-              <div className="pay-by-phone">{renderPayByPhoneStep()}</div>
-            ) : selectedContact ? (
-              <>
-                <div className="contact-details">
-                  <h2>Contact Information</h2>
-                  <p>Name: {selectedContact.name}</p>
-                  <p>Phone Number: {selectedContact.phoneNumber}</p>
-                </div>
-                <button className="pay-money-button" onClick={handleKevinClick}>
-                  Select
-                </button>
-              </>
-            ) : (
-              <h1></h1>
-            )}
+              ) : (
+                <>
+                  <p>Scan or Upload a QR code image to scan</p>
+                </>
+              )}
+            </div>
+          ) : (
+            <>{renderPayByScanStep()}</>
+          )
+        ) : showPayByPhoneNumber ? (
+          <div className="pay-by-phone">{renderPayByPhoneStep()}</div>
+        ) : selectedContact ? (
+          <>
+            <div className="contact-details">
+              <h2>Contact Information</h2>
+              <p>Name: {selectedContact.name}</p>
+              <p>Phone Number: {selectedContact.phoneNumber}</p>
+            </div>
+            <button className="pay-money-button" onClick={handleKevinClick}>
+              Select
+            </button>
+          </>
+        ) : (
+          <h1></h1>
+        )}
       </div>
     </div>
   );
