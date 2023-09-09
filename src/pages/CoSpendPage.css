@@ -3,8 +3,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 100vh;
-  background-color: var(--bg-black); /* Updated background color to black */
+  min-height: 100vh; /* Change height to min-height */
+  background-color: var(--bg-black);
 }
 
 /* Left side with buttons */
@@ -15,25 +15,34 @@
   justify-content: flex-start;
   align-items: center;
   padding: 20px;
-  background-color: var(--bg-black); /* Updated background color to black */
+  background-color: var(--bg-black);
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .co-spend-button {
-  margin: 10px 0;
-  padding: 12px 24px;
-  background-color: #6A00FF;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
+  width: 313px;
+  height: 299px;
+  flex-shrink: 0;
+  border-radius: 29px;
+  background: linear-gradient(180deg, #6A00FF 0%, rgba(106, 0, 255, 0.00) 100%);
+  box-shadow: 0px 4px 26px 0px rgba(0, 0, 0, 0.25);
+  font-weight: bold; /* Improved font weight */
+  font-size: 24px; /* Reduced font size */
+  font-family: "Gilroy", sans-serif; /* Specify a generic font family */
+  color: #ccc;
+  text-align: center; /* Center text */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
-  font-size: 16px;
   transition: background-color 0.3s ease;
 }
 
 .co-spend-button:hover {
   background-color: #4a0080;
+  transform: scale(1.05); /* Add a slight scale effect on hover */
 }
 
 .co-spend-buttons .selected {
@@ -49,24 +58,22 @@
   align-items: center;
   padding: 20px;
   text-align: center;
-  max-height: 70vh; /* Adjust this value as needed */
-  overflow-y: auto; /* Enable vertical scrolling when content exceeds max-height */
+  max-height: 70vh;
+  overflow-y: auto;
 }
 
 .co-spend-welcome h1 {
-  font-size: 24px;
+  font-size: 28px; /* Increased font size */
   font-weight: bold;
   color: #333;
-}
-
-.contact-details {
-  margin-bottom: 20px;
+  margin-bottom: 20px; /* Add some spacing below the heading */
 }
 
 .contact-details h2 {
   font-size: 20px;
   font-weight: bold;
   color: #6A00FF;
+  margin-top: 0; /* Remove default top margin */
 }
 
 .contact-details p {
@@ -82,7 +89,7 @@
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px; /* Slightly increased font size */
   transition: background-color 0.3s ease;
 }
 
@@ -105,25 +112,25 @@
 .pay-by-phone input[type="text"],
 .pay-by-phone input[type="number"] {
   width: 100%;
-  padding: 8px;
+  padding: 12px; /* Increased padding */
   margin-bottom: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
 }
 
-.pay-by-phone .add-users-button {
+.add-users-button {
   background-color: #6A00FF;
   color: #fff;
   padding: 12px 24px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
   transition: background-color 0.3s ease;
 }
 
-.pay-by-phone .add-users-button:hover {
+.add-users-button:hover {
   background-color: #4a0080;
 }
 
@@ -137,4 +144,3 @@
   flex: 1;
   margin-right: 10px;
 }
-

@@ -2,6 +2,10 @@
 @import './common/styles/variables.css';
 @import './common/styles/commonClasses.css';
 @import './common/styles/animations.css';
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
 body {
   margin: 0;
   font-family:Gilroy,sans-serif;
