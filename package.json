@@ -12,6 +12,7 @@
     "font-awesome": "^4.7.0",
     "html5-qrcode": "^2.3.8",
     "jsqr": "^1.4.0",
+    "jszip": "^3.10.1",
     "libphonenumber-js": "^1.10.44",
     "pizzip": "^3.1.4",
     "react": "^18.2.0",

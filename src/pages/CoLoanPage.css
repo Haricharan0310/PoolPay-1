@@ -55,6 +55,7 @@
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
+  margin-right: 20px;
 }
 
 .co-loan-welcome button:hover {

@@ -15,11 +15,9 @@ import {
 import Modal from 'react-modal';
 import app from "../firebase";
 import LoanRequestForm from "./LoanRequestForm";
-import "./CoLoanPage.css"; // Import your CSS file for styling
+import "./CoLoanPage.css"; 
 import parsePhoneNumber from 'libphonenumber-js';
-import Docxtemplater from "docxtemplater";
-import PizZip from "pizzip";
-import { saveAs } from 'file-saver';
+
 
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -341,72 +339,82 @@ const CoLoanPage = () => {
     updatedUsers[index][field] = value;
     setUsers(updatedUsers);
   };
+  
 
   const handleGenerateDocument = () => {
-    // Load your Word document template (replace "your_template.docx" with the actual path)
-    fetch("./AutoDocumentation.docx")
-      .then((response) => response.arrayBuffer())
-      .then((templateData) => {
-        // Create a buffer from the template data
-        
-  
-        // Create a Docxtemplater instance with the template buffer
-        const doc = new Docxtemplater().loadZip(new PizZip(templateData));
+    const data = {
+      lenderName,
+      borrowerName,
+      duration,
+      amount: totalAmount.toFixed(2), // Assuming totalAmount is a number
+    };
+    const htmlTemplate = `
+    <html>
+      <head>
+        <title>Loan Agreement</title>
+      </head>
+      <body>
+        <h1>DRAFT OF LOAN AGREEMENT</h1>
+        <p>LOAN AGREEMENT BETWEEN</p>
+        <p>${lenderName}</p>
+        <p>AND</p>
+        <p>${borrowerName}</p>
+        <p>THIS AGREEMENT made BETWEEN ${lenderName} hereinafter called "the Lender" AND ${borrowerName} hereinafter called "the Borrower" and reference to the parties hereto shall mean and include their respective heirs, executors, administrators and assigns;</p>
+        <p>WHEREAS the Borrower is in need of funds and hence has approached the Lender to grant him/her an interest-free loan of Rs.${totalAmount}/- for a period of ${duration}</p>
+        <p>AND WHEREAS the Lender has agreed to grant a loan to the Borrower, free of interest, as the Lender and the Borrower have known each other for enough time;</p>
+        <p>AND WHEREAS the parties hereto are desirous of recording the terms and conditions of this loan in writing;</p>
+        <p>NOW THIS AGREEMENT WITNESSETH and it is hereby agreed by and between the parties hereto as under:</p>
+        <p>1. The Borrower hereto, being in need of money, has requested the Lender to give her an interest-free loan of Rs.${totalAmount}/-, to which the Lender has agreed.</p>
+        <p>2. The said loan is required by the Borrower for a period of ${duration} months.</p>
+        <p>3. The terms and conditions of this Agreement are arrived at by the mutual consent of the parties hereto.</p>
+        <p>*Terms and Conditions:*</p>
+        <p>1. The Lender, ${lenderName}, agrees to lend the Borrower, ${borrowerName}, the sum of Rs.${totalAmount}/- .</p>
+        <p>2. The Borrower acknowledges receiving the loan and agrees to repay the full amount, including interest, before ${duration}.</p>
+        <p>3. The Borrower shall make repayment in a single installment before ${duration}. Failure to repay on time may result in additional charges or penalties.</p>
+        <p>4. Both parties agree to abide by all applicable laws and regulations governing this loan transaction.</p>
+        <p>*Note:* This document is a legally binding agreement. Please read and understand the terms.</p>
+        <!-- Lender's Signature -->
+       <h4> <p>Lender's Signature: ${lenderName}</p>
+        <!-- Borrower's Signature -->
+        <p>Borrower's Signature:${borrowerName}</p></h4>
+      </body>
+    </html>
+  `;
 
+  // Create a Blob from the HTML content
+  const blob = new Blob([htmlTemplate], { type: 'text/html' });
 
-  
-        // Provide data to fill placeholders in the template
-        const data = {
-          lenderName,
-          borrowerName,
-          duration,
-          amount: totalAmount.toFixed(2), // Assuming totalAmount is a number
-        };
-  
-        // Set the data in the template
-        doc.setData(data);
-  
-        try {
-          // Render the document
-          
+  // Create a URL for the Blob
+  const url = window.URL.createObjectURL(blob);
 
-          // Generate the output Blob
-          const outputData = doc.render();
+  // Create a link element to trigger the download
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'loan_agreement.html';
+  a.style.display = 'none';
 
-          // Create a URL for the Blob
-          const url = window.URL.createObjectURL(outputData);
+  // Trigger the download
+  document.body.appendChild(a);
+  a.click();
 
-          // Create a link element to trigger the download
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = "loan_agreement.zip";
-          a.style.display = "none";
+  // Clean up
+  window.URL.revokeObjectURL(url);
+  document.body.removeChild(a);
 
-          // Trigger the download
-          document.body.appendChild(a);
-          a.click();
-
-          // Clean up
-          window.URL.revokeObjectURL(url);
-          document.body.removeChild(a);
-        } catch (error) {
-          // Handle errors during document generation
-          console.error("Error generating document:", error);
-        }
-      });
   };
 
   return (
     <div className="co-loan-container">
       
       <div className="co-loan-welcome"><button onClick={handleLoanFormOpen}>Request Loan</button>
+      <button onClick={() => handleLoanButtonClick}>Pay by Phone Number</button>
 
 {showLoanForm && (
   <LoanRequestForm onSubmit={handleLoanFormSubmit} onClose={handleLoanFormClose} />
 )}</div>
       <div className="co-loan-dashboard">
       
-        {/* Display loan requests as cards */}
+        
         {loanRequests.map((request) => (
           <div key={request.id} className="loan-card">
             <div className="card-content">
