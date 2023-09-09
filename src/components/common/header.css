@@ -88,3 +88,13 @@
 .header-nav-item:hover::before {
   transform: scaleX(1); /* Expand the box to full width on hover */
 }
+
+.header-logo {
+  background-image: url(../../../public/images/Rectangle61.svg);
+  background-size: contain; /* Adjust this based on your logo size */
+  background-repeat: no-repeat;
+  width: 200px;
+  height: 200px;
+
+  /* Other styles for the header logo */
+}

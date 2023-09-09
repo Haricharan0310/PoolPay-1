@@ -1,6 +1,6 @@
 .footer {
     background-color: var(--bg-black); /* Background color for the footer */
-    color: var(--bg-violet); /* Text color for the footer */
+    color: white; /* Text color for the footer */
     padding: 20px 0; /* Add padding to the top and bottom */
     text-align: center;
     font-weight: 300;

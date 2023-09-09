@@ -11,7 +11,9 @@ const Header = () => {
 
   return (
     <div className="mobile-menu-wrapper">
-      <div className={`mobile-menu only-mobile ${showMobMenu ? "overlay" : ""}`}>
+      <div
+        className={`mobile-menu only-mobile ${showMobMenu ? "overlay" : ""}`}
+      >
         <div className="mobile-navbar">
           <Link to="/co-spend" className="mobile-nav-item">
             CO SPEND
@@ -25,12 +27,13 @@ const Header = () => {
         </div>
       </div>
       <div className="flex max-width header">
-        <Link to="/" className="header-logo">
-          POOLPAY
-        </Link>
+        <div className="header-logo"></div>
+
         <div className="only-mobile mobile-menu-button-wrapper">
           <button
-            className={`hamburger hamburger--spin ${showMobMenu ? "is-active" : ""}`}
+            className={`hamburger hamburger--spin ${
+              showMobMenu ? "is-active" : ""
+            }`}
             type="button"
             onClick={toggleMobileMenu}
           >
