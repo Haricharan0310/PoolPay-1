@@ -7,7 +7,7 @@ const HeroSection = () => {
     <div className="hero-section-wrapper">
       <div className="flex absolute-center flex-col hero-section max-width">
         <div className="hero-heading">
-          Share Moments,Share Costs, Request with Ease.
+          Share Moments, Share Costs, Request with Ease.
         </div>
         <div className="hero-subheading"> with POOLPAY</div>
         <Login buttonText="Start Pooling" />
@@ -17,4 +17,3 @@ const HeroSection = () => {
 };
 
 export default HeroSection;
-
