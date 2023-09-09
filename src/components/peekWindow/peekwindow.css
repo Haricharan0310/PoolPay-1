@@ -1,8 +1,15 @@
-.window-peak{
-    background-image: url('../../../public/images/Frame\ 20.svg');
-    min-height: 600px;
+.window-peak {
+    background-image: url('../../../public/images/Frame\ 25.png');
+    min-height: 600px; /* Default height for larger screens */
+
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
+}
+
+@media (max-width: 767px) {
+    .window-peak {
+        min-height: 300px; /* Adjust the height for phones as needed */
+    }
 }

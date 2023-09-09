@@ -1,0 +1,40 @@
+.footer {
+    background-color: var(--bg-black); /* Background color for the footer */
+    color: var(--bg-violet); /* Text color for the footer */
+    padding: 20px 0; /* Add padding to the top and bottom */
+    text-align: center;
+    font-weight: 300;
+  }
+  
+  .footer-content {
+    max-width: 960px; /* Set a max width for the content */
+    margin: 0 auto; /* Center the content horizontally */
+  }
+  
+  .footer p {
+    margin: 10px 0; /* Add some spacing between each paragraph */
+  }
+  
+  /* Style the link (if you add any) */
+  .footer a {
+    color: #fff; /* Link color */
+    text-decoration: none; /* Remove underlines from links */
+    font-weight: bold; /* Make links bold, if needed */
+  }
+  
+  /* Style the link on hover (if you add any) */
+  .footer a:hover {
+    text-decoration: underline; /* Add underlines on hover, if needed */
+  }
+  
+  /* Media query for responsiveness (adjust as needed) */
+  @media (max-width: 768px) {
+    .footer {
+      padding: 20px; /* Reduce padding for smaller screens */
+    }
+  
+    .footer-content {
+      text-align: center; /* Center the content for smaller screens */
+    }
+  }
+  
