@@ -14,6 +14,7 @@ import {
 } from "firebase/firestore";
 import Modal from 'react-modal';
 import app from "../firebase";
+import LoanRequestForm from "./LoanRequestForm";
 import "./CoLoanPage.css"; // Import your CSS file for styling
 import parsePhoneNumber from 'libphonenumber-js';
 import Docxtemplater from "docxtemplater";
@@ -104,7 +105,24 @@ const CoLoanPage = () => {
     signOut(auth);
   };
 
-  
+  const handleLoanFormOpen = () => {
+    setShowLoanForm(true);
+  };
+  const handleLoanFormClose = () => {
+    setShowLoanForm(false);
+  };
+  const handleLoanFormSubmit = async (loanRequest) => {
+    try {
+      // Add the loan request to Firestore
+      const loanRequestsCollection = collection(db, "loanRequests");
+      await addDoc(loanRequestsCollection, {
+        ...loanRequest,
+        timestamp: new Date(),
+      });
+    } catch (error) {
+      console.error("Error adding loan request:", error);
+    }
+  };
 
   const handlePayMoneyClick = () => {
     // Check if the total amount and totalUserAmount match before proceeding with payment
@@ -330,11 +348,12 @@ const CoLoanPage = () => {
       .then((response) => response.arrayBuffer())
       .then((templateData) => {
         // Create a buffer from the template data
-        const buffer = new Uint8Array(templateData);
+        
   
         // Create a Docxtemplater instance with the template buffer
-        const doc = new Docxtemplater();
-        doc.loadZip(buffer);
+        const doc = new Docxtemplater().loadZip(new PizZip(templateData));
+
+
   
         // Provide data to fill placeholders in the template
         const data = {
@@ -348,14 +367,28 @@ const CoLoanPage = () => {
         doc.setData(data);
   
         try {
-          // Render the document (replace "your_output.docx" with the desired output file name)
-          doc.render();
-          const outputBlob = doc.getZip().generate({
-            mimeType: "application/",
-          });
-  
-          // Save the Blob as a downloadable file
-          saveAs(outputBlob, "loan_agreement.docx");
+          // Render the document
+          
+
+          // Generate the output Blob
+          const outputData = doc.render();
+
+          // Create a URL for the Blob
+          const url = window.URL.createObjectURL(outputData);
+
+          // Create a link element to trigger the download
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "loan_agreement.zip";
+          a.style.display = "none";
+
+          // Trigger the download
+          document.body.appendChild(a);
+          a.click();
+
+          // Clean up
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
         } catch (error) {
           // Handle errors during document generation
           console.error("Error generating document:", error);
@@ -366,8 +399,13 @@ const CoLoanPage = () => {
   return (
     <div className="co-loan-container">
       
+      <div className="co-loan-welcome"><button onClick={handleLoanFormOpen}>Request Loan</button>
 
+{showLoanForm && (
+  <LoanRequestForm onSubmit={handleLoanFormSubmit} onClose={handleLoanFormClose} />
+)}</div>
       <div className="co-loan-dashboard">
+      
         {/* Display loan requests as cards */}
         {loanRequests.map((request) => (
           <div key={request.id} className="loan-card">
