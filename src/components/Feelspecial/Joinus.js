@@ -1,5 +1,5 @@
 
-import Button from "../components/common/Button";
+import Button from "../common/Button"; 
 import React from "react";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 
@@ -17,7 +17,7 @@ const Login = () => {
 
   return (
     <div>
-      <Button onClick={handleGoogleSignIn} buttonText="Start Pooling"/>
+      <Button onClick={handleGoogleSignIn} buttonText=" Join Us"/>
       {/* Add other authentication methods/buttons here */}
     </div>
   );

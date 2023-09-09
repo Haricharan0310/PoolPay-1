@@ -1,6 +1,7 @@
 import React from "react";
 import "./feelspecial.css";
 import Button from "../../components/common/Button.js";
+import Login from "./Joinus";
 const FeelSpecial = () => {
   return (
     <div className="feel-special photo-section">
@@ -18,7 +19,7 @@ const FeelSpecial = () => {
               user-friendly environment."
             </div>
             <div>
-              <Button buttonText="Join Us" />
+              <Login buttonText="Join Us" />
             </div>
           </div>
         </div>

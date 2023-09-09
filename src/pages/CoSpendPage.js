@@ -355,7 +355,7 @@ const CoSpendPage = () => {
               {(totalAmount - totalUserAmount).toFixed(2)}
             </p>
             <button className="pay-money-button" onClick={handlePayMoneyClick}>
-              Pay Money
+              Send Requests
             </button>
             <button onClick={scanPrevStepHandler}>Previous</button>
           </div>
@@ -532,7 +532,7 @@ const CoSpendPage = () => {
                 </button>
               </>
             ) : (
-              <h1>Welcome to Co Spend</h1>
+              <h1></h1>
             )}
       </div>
     </div>

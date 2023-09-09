@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "./Button";
 import "./herosection.css";
-
+import Login from "../../pages/Login";
 const HeroSection = () => {
   return (
     <div className="hero-section-wrapper">
@@ -10,7 +10,7 @@ const HeroSection = () => {
           Share Moments,Share Costs, Request with Ease.
         </div>
         <div className="hero-subheading"> with POOLPAY</div>
-        <Button buttonText="Start Pooling" />
+        <Login buttonText="Start Pooling" />
       </div>
     </div>
   );

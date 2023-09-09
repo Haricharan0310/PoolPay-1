@@ -12,12 +12,13 @@ import {
   orderBy,
   onSnapshot,
 } from "firebase/firestore";
-import LoanRequestForm from "./LoanRequestForm";
 import Modal from 'react-modal';
-import Login from "./Login";
 import app from "../firebase";
 import "./CoLoanPage.css"; // Import your CSS file for styling
 import parsePhoneNumber from 'libphonenumber-js';
+import Docxtemplater from "docxtemplater";
+import PizZip from "pizzip";
+import { saveAs } from 'file-saver';
 
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -34,6 +35,9 @@ const CoLoanPage = () => {
   const [users, setUsers] = useState([]);
   const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
+  const [lenderName, setLenderName] = useState("");
+  const [borrowerName, setBorrowerName] = useState("");
+  const [duration, setDuration] = useState("");
   const customStyles = {
     content: {
       top: "50%",
@@ -81,28 +85,12 @@ const CoLoanPage = () => {
     };
   }, []);
 
-  const handleLoanFormOpen = () => {
-    setShowLoanForm(true);
-  };
 
-  const handleLoanFormClose = () => {
-    setShowLoanForm(false);
-  };
+  
 
  
   
-  const handleLoanFormSubmit = async (loanRequest) => {
-    try {
-      // Add the loan request to Firestore
-      const loanRequestsCollection = collection(db, "loanRequests");
-      await addDoc(loanRequestsCollection, {
-        ...loanRequest,
-        timestamp: new Date(),
-      });
-    } catch (error) {
-      console.error("Error adding loan request:", error);
-    }
-  };
+  
 
  
 
@@ -150,6 +138,20 @@ const CoLoanPage = () => {
     setCurrentStep((prevStep) => prevStep - 1);
   };
 
+  
+
+  // Add onChange handlers for lenderName, borrowerName, and duration
+  const handleLenderNameInputChange = (e) => {
+    setLenderName(e.target.value);
+  };
+
+  const handleBorrowerNameInputChange = (e) => {
+    setBorrowerName(e.target.value);
+  };
+
+  const handleDurationInputChange = (e) => {
+    setDuration(e.target.value);
+  };
   const renderPayByPhoneStep = () => {
     switch (currentStep) {
       case 1:
@@ -162,7 +164,9 @@ const CoLoanPage = () => {
               value={phoneNumberToPay}
               onChange={handlePhoneNumberInputChange}
             />
-            <button onClick={handleNextStep} disabled={!isPhoneNumberValid}>Next</button>
+            <button onClick={handleNextStep} disabled={!isPhoneNumberValid}>
+              Next
+            </button>
           </div>
         );
       case 2:
@@ -174,6 +178,27 @@ const CoLoanPage = () => {
               placeholder="Total Amount"
               value={totalAmount}
               onChange={handleTotalAmountInputChange}
+            />
+            <label>Lender's Name:</label>
+            <input
+              type="text"
+              placeholder="Lender's Name"
+              value={lenderName}
+              onChange={handleLenderNameInputChange}
+            />
+            <label>Borrower's Name:</label>
+            <input
+              type="text"
+              placeholder="Borrower's Name"
+              value={borrowerName}
+              onChange={handleBorrowerNameInputChange}
+            />
+            <label>Duration (months):</label>
+            <input
+              type="number"
+              placeholder="Duration"
+              value={duration}
+              onChange={handleDurationInputChange}
             />
             <button onClick={handleNextStep}>Next</button>
           </div>
@@ -213,11 +238,7 @@ const CoLoanPage = () => {
                     placeholder={`User ${index + 1} Phone Number`}
                     value={user.phoneNumber}
                     onChange={(e) =>
-                      handleUserInputChange(
-                        index,
-                        "phoneNumber",
-                        e.target.value
-                      )
+                      handleUserInputChange(index, "phoneNumber", e.target.value)
                     }
                   />
                 </div>
@@ -251,7 +272,7 @@ const CoLoanPage = () => {
               Amount Remaining (₹): ₹
               {(totalAmount - totalUserAmount).toFixed(2)}
             </p>
-            <button className="pay-money-button" onClick={handlePayMoneyClick}>
+            <button className="pay-money-button" onClick={handleGenerateDocument}>
               Pay Money
             </button>
             <button onClick={handlePrevStep}>Previous</button>
@@ -261,6 +282,7 @@ const CoLoanPage = () => {
         return null;
     }
   };
+  
   const handleAddUserClick = () => {
     if (numUsersPooling > 0) {
       setUsers(
@@ -302,27 +324,48 @@ const CoLoanPage = () => {
     setUsers(updatedUsers);
   };
 
+  const handleGenerateDocument = () => {
+    // Load your Word document template (replace "your_template.docx" with the actual path)
+    fetch("./AutoDocumentation.docx")
+      .then((response) => response.arrayBuffer())
+      .then((templateData) => {
+        // Create a buffer from the template data
+        const buffer = new Uint8Array(templateData);
+  
+        // Create a Docxtemplater instance with the template buffer
+        const doc = new Docxtemplater();
+        doc.loadZip(buffer);
+  
+        // Provide data to fill placeholders in the template
+        const data = {
+          lenderName,
+          borrowerName,
+          duration,
+          amount: totalAmount.toFixed(2), // Assuming totalAmount is a number
+        };
+  
+        // Set the data in the template
+        doc.setData(data);
+  
+        try {
+          // Render the document (replace "your_output.docx" with the desired output file name)
+          doc.render();
+          const outputBlob = doc.getZip().generate({
+            mimeType: "application/",
+          });
+  
+          // Save the Blob as a downloadable file
+          saveAs(outputBlob, "loan_agreement.docx");
+        } catch (error) {
+          // Handle errors during document generation
+          console.error("Error generating document:", error);
+        }
+      });
+  };
+
   return (
     <div className="co-loan-container">
-      <div className="co-loan-welcome">
-        {user ? (
-          <div>
-            <h2>Welcome, {user.displayName}</h2>
-            <button onClick={handleSignOut}>Sign Out</button>
-          </div>
-        ) : (
-          <div>
-            <h2>Welcome to Co Loan</h2>
-            <Login /> {/* Render the Login component */}
-          </div>
-        )}
-
-        <button onClick={handleLoanFormOpen}>Request Loan</button>
-
-        {showLoanForm && (
-          <LoanRequestForm onSubmit={handleLoanFormSubmit} onClose={handleLoanFormClose} />
-        )}
-      </div>
+      
 
       <div className="co-loan-dashboard">
         {/* Display loan requests as cards */}
