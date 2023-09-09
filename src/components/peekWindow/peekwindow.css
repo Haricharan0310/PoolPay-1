@@ -1,0 +1,8 @@
+.window-peak{
+    background-image: url('../../../public/images/Frame\ 20.svg');
+    min-height: 600px;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+}

@@ -1,0 +1,55 @@
+/* Default styles for larger screens */
+.product-showcase {
+    width: 100vw;
+    height: 470px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .showcase-wrapper {
+    min-height: 70%;
+  }
+  
+  .showcase-ui {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+  }
+  
+  .showcase-mockup-1 {
+    transform: translate(-105%, 5%);
+    z-index: 99;
+  }
+  
+  .showcase-mockup-2 {
+    transform: translate(-50%, 5%);
+    z-index: 100;
+  }
+  
+  .showcase-mockup-3 {
+    transform: translate(5%, 5%);
+    z-index: 99;
+  }
+  
+  /* Media query for screens with a maximum width of 1279px */
+  @media all and (max-width: 1279px) {
+    .product-showcase {
+      height: auto; /* Allow height to adjust based on content */
+      padding: 20px; /* Add some padding for spacing */
+    }
+  
+    .showcase-ui {
+      width: 100%; /* Make the images full width */
+      position: relative;
+      transform: none; /* Remove transforms */
+      left: 0;
+    }
+  
+    .showcase-mockup-1,
+    .showcase-mockup-2,
+    .showcase-mockup-3 {
+      transform: none; /* Remove transforms */
+      z-index: auto; /* Reset z-index */
+    }
+  }
+  

@@ -16,6 +16,33 @@
     flex-direction: column;
 }
 
+.photo-section{
+    height: 100%;
+    min-height: 100vh;
+    min-width: 100vw;
+    background-size: cover;
+}
+
+.photo-section-child{
+    padding: 50px 0px ;
+}
+
+.photo-section-subheading{
+    font-size: 60px;
+    line-height:70px;
+    font-weight: 700;
+    max-width: 900px;
+}
+
+.photo-section-description{
+    font-size: 20px;
+    line-height:28px;
+    font-weight: 600;
+    max-width: 630px;
+    margin-top: 100px;
+    margin-bottom:40px;
+}
+
 @media all and (max-width:1279px) {
     .max-width{
         max-width: 80%;
