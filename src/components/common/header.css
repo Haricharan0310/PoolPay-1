@@ -1,12 +1,7 @@
 .header{
     justify-content: space-between;
     align-items: center;
-    padding: 30px 0px 40px;
-}
-
-.header-logo{
-    font-size: medium;
-    font-weight: 900;
+    padding: 0px 0px 40px;
 }
 
 .header-nav-item{
@@ -28,9 +23,6 @@
     height: 100vh;
     width: 100vw;
     text-align: left;
-    padding: 32px;
-    top: 0px;
-    left: 0px;
     transition: transform 0.3s ease-in-out 0s;
     z-index: 1;
 }
@@ -49,11 +41,11 @@
     width: 90%;
 }
 .mobile-nav-item{
-    padding: 15px;
+    padding: 5px;
     margin-bottom: 20px;
     border: 1px solid transparent;
     border-radius: 15px;
-    font-size: 14px;
+    font-size: 20px;
     font-weight: 600;
     background-color: var(--bg-light-gray);
 }
@@ -91,10 +83,10 @@
 
 .header-logo {
   background-image: url(../../../public/images/Rectangle61.svg);
-  background-size: contain; /* Adjust this based on your logo size */
-  background-repeat: no-repeat;
-  width: 200px;
-  height: 200px;
+  background-size: contain;
+  width: 250px;
+  height: 250px;
+  padding-top: 0px;
 
   /* Other styles for the header logo */
 }
