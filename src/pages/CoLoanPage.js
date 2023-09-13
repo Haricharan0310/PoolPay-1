@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  getAuth,
-  onAuthStateChanged,
-  signOut,
-} from "firebase/auth";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import {
   getFirestore,
   collection,
@@ -12,12 +8,11 @@ import {
   orderBy,
   onSnapshot,
 } from "firebase/firestore";
-import Modal from 'react-modal';
+import Modal from "react-modal";
 import app from "../firebase";
 import LoanRequestForm from "./LoanRequestForm";
-import "./CoLoanPage.css"; 
-import parsePhoneNumber from 'libphonenumber-js';
-
+import "./CoLoanPage.css";
+import parsePhoneNumber from "libphonenumber-js";
 
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -49,7 +44,7 @@ const CoLoanPage = () => {
       color: "black",
       width: 400,
       maxHeight: "calc(100vh-210px)",
-      overflowY: "auto"
+      overflowY: "auto",
     },
   };
 
@@ -58,7 +53,6 @@ const CoLoanPage = () => {
     const sum = users.reduce((acc, user) => acc + parseFloat(user.amount), 0);
     setTotalUserAmount(sum);
   }, [users]);
-
 
   useEffect(() => {
     // Check the user's authentication state
@@ -71,9 +65,15 @@ const CoLoanPage = () => {
     });
 
     // Retrieve loan requests from Firestore, ordered by timestamp
-    const q = query(collection(db, "loanRequests"), orderBy("timestamp", "desc"));
+    const q = query(
+      collection(db, "loanRequests"),
+      orderBy("timestamp", "desc")
+    );
     const unsubscribeFirestore = onSnapshot(q, (querySnapshot) => {
-      const requests = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      const requests = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
       setLoanRequests(requests);
     });
 
@@ -83,15 +83,6 @@ const CoLoanPage = () => {
       unsubscribeFirestore();
     };
   }, []);
-
-
-  
-
- 
-  
-  
-
- 
 
   const handleLoanButtonClick = (loanRequest) => {
     // Placeholder: Display a success message for the loan
@@ -144,8 +135,7 @@ const CoLoanPage = () => {
       return false;
     }
   };
-  
-  
+
   const handleNextStep = () => {
     setCurrentStep((prevStep) => prevStep + 1);
   };
@@ -153,8 +143,6 @@ const CoLoanPage = () => {
   const handlePrevStep = () => {
     setCurrentStep((prevStep) => prevStep - 1);
   };
-
-  
 
   // Add onChange handlers for lenderName, borrowerName, and duration
   const handleLenderNameInputChange = (e) => {
@@ -254,7 +242,11 @@ const CoLoanPage = () => {
                     placeholder={`User ${index + 1} Phone Number`}
                     value={user.phoneNumber}
                     onChange={(e) =>
-                      handleUserInputChange(index, "phoneNumber", e.target.value)
+                      handleUserInputChange(
+                        index,
+                        "phoneNumber",
+                        e.target.value
+                      )
                     }
                   />
                 </div>
@@ -288,7 +280,10 @@ const CoLoanPage = () => {
               Amount Remaining (₹): ₹
               {(totalAmount - totalUserAmount).toFixed(2)}
             </p>
-            <button className="pay-money-button" onClick={handleGenerateDocument}>
+            <button
+              className="pay-money-button"
+              onClick={handleGenerateDocument}
+            >
               Pay Money
             </button>
             <button onClick={handlePrevStep}>Previous</button>
@@ -298,7 +293,7 @@ const CoLoanPage = () => {
         return null;
     }
   };
-  
+
   const handleAddUserClick = () => {
     if (numUsersPooling > 0) {
       setUsers(
@@ -313,12 +308,10 @@ const CoLoanPage = () => {
 
   const handlePhoneNumberInputChange = (e) => {
     const newPhoneNumber = e.target.value;
-  const isValid = validatePhoneNumber(newPhoneNumber);
-  setPhoneNumberToPay(newPhoneNumber); // Update the phone number state
-  setIsPhoneNumberValid(isValid);
-
+    const isValid = validatePhoneNumber(newPhoneNumber);
+    setPhoneNumberToPay(newPhoneNumber); // Update the phone number state
+    setIsPhoneNumberValid(isValid);
   };
-  
 
   const handleTotalAmountInputChange = (e) => {
     setTotalAmount(parseFloat(e.target.value));
@@ -339,7 +332,6 @@ const CoLoanPage = () => {
     updatedUsers[index][field] = value;
     setUsers(updatedUsers);
   };
-  
 
   const handleGenerateDocument = () => {
     const data = {
@@ -381,61 +373,68 @@ const CoLoanPage = () => {
     </html>
   `;
 
-  // Create a Blob from the HTML content
-  const blob = new Blob([htmlTemplate], { type: 'text/html' });
+    // Create a Blob from the HTML content
+    const blob = new Blob([htmlTemplate], { type: "text/html" });
 
-  // Create a URL for the Blob
-  const url = window.URL.createObjectURL(blob);
+    // Create a URL for the Blob
+    const url = window.URL.createObjectURL(blob);
 
-  // Create a link element to trigger the download
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'loan_agreement.html';
-  a.style.display = 'none';
+    // Create a link element to trigger the download
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "loan_agreement.html";
+    a.style.display = "none";
 
-  // Trigger the download
-  document.body.appendChild(a);
-  a.click();
+    // Trigger the download
+    document.body.appendChild(a);
+    a.click();
 
-  // Clean up
-  window.URL.revokeObjectURL(url);
-  document.body.removeChild(a);
-
+    // Clean up
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
   };
 
   return (
     <div className="co-loan-container">
-      
-      <div className="co-loan-welcome"><button onClick={handleLoanFormOpen}>Request Loan</button>
-      <button onClick={() => handleLoanButtonClick}>Pay by Phone Number</button>
+      <div className="co-loan-welcome">
+        <button onClick={handleLoanFormOpen}>Request Loan</button>
+        <button onClick={() => handleLoanButtonClick}>
+          Pay by Phone Number
+        </button>
 
-{showLoanForm && (
-  <LoanRequestForm onSubmit={handleLoanFormSubmit} onClose={handleLoanFormClose} />
-)}</div>
+        {showLoanForm && (
+          <LoanRequestForm
+            onSubmit={handleLoanFormSubmit}
+            onClose={handleLoanFormClose}
+          />
+        )}
+      </div>
       <div className="co-loan-dashboard">
-      
-        
         {loanRequests.map((request) => (
           <div key={request.id} className="loan-card">
             <div className="card-content">
-              <strong>User:</strong> {request.user}<br />
-              <strong>Amount:</strong> {request.amount}<br />
-              <strong>Info:</strong> {request.info}<br />
+              <strong>User:</strong> {request.user}
+              <br />
+              <strong>Amount:</strong> {request.amount}
+              <br />
+              <strong>Info:</strong> {request.info}
+              <br />
             </div>
-            <button onClick={() => handleLoanButtonClick(request)}>Loan</button> {/* Loan button */}
-            
-        {showAmountForm && (
-          <Modal
-          isOpen={showAmountForm}
-          onRequestClose={() => setShowAmountForm(false)}
-          style={customStyles}
-        >
-          <div className="pay-by-phone">{renderPayByPhoneStep()}</div>
-  
-          <button onClick={() => setShowAmountForm(false)}>Close</button>
-        </Modal>
-        )}
-      
+            <button onClick={() => handleLoanButtonClick(request)}>
+              Loan
+            </button>{" "}
+            {/* Loan button */}
+            {showAmountForm && (
+              <Modal
+                isOpen={showAmountForm}
+                onRequestClose={() => setShowAmountForm(false)}
+                style={customStyles}
+              >
+                <div className="pay-by-phone">{renderPayByPhoneStep()}</div>
+
+                <button onClick={() => setShowAmountForm(false)}>Close</button>
+              </Modal>
+            )}
           </div>
         ))}
       </div>
