@@ -1,4 +1,4 @@
-.co-loan-container {
+.co-spend-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -7,7 +7,7 @@
 }
 
 /* Left side with buttons */
-.co-loan-buttons {
+.co-spend-buttons {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -19,7 +19,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.co-loan-button {
+.co-spend-button {
   width: 313px;
   height: 299px;
   flex-shrink: 0;
@@ -39,28 +39,22 @@
   transition: background-color 0.3s ease;
 }
 
-.co-loan-button:hover {
+.co-spend-button:hover {
   background-color: #4a0080;
   transform: scale(1.05); /* Add a slight scale effect on hover */
 }
 
-.co-loan-buttons .selected {
+.co-spend-buttons .selected {
   background-color: #4a0080;
 }
   
-.co-loan-welcome {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Welcome image or content */
-.co-loan-welcome img {
-  max-width: 100%;
-  height: auto;
-}
-/* CoLoanPage.css */
+  .co-loan-welcome {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  /* CoLoanPage.css */
 
 /* Container for the entire CoLoanPage */
 .co-loan-container {
