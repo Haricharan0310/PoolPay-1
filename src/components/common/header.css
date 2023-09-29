@@ -90,3 +90,16 @@
 
   /* Other styles for the header logo */
 }
+
+.header-profile {
+  display: flex;
+  margin-left: 15px; /* Adjust the margin as needed */
+}
+
+.profile-picture {
+  width: 55px; /* Adjust the width as needed */
+  height: 55px; /* Adjust the height as needed */
+  border-radius: 50%; /* Makes the image round */
+  object-fit: cover; /* Ensures the image fills the container */
+  margin-right: 10px; /* Adjust the margin as needed */
+}
