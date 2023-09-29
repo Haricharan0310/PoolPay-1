@@ -103,3 +103,25 @@
   object-fit: cover; /* Ensures the image fills the container */
   margin-right: 10px; /* Adjust the margin as needed */
 }
+
+/* CSS for profile dropdown */
+.profile-dropdown {
+  position: absolute;
+  top: 60%;/* Position it on the right side of the profile picture */
+  background-color:rgba(0, 0, 0, 0.2); /* Background color */
+  border: 1px solid #ccc; /* Border */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Box shadow for a subtle lift effect */
+  z-index: 1; /* Ensure the dropdown appears above other content */
+  width: 150px; /* Adjust the width as needed */
+}
+
+.profile-dropdown button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  text-align: left;
+  border: none;
+  cursor: pointer;
+}
+
+
