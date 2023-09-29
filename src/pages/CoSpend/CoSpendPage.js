@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./CoSpendPage.css";
 import parsePhoneNumber from "libphonenumber-js";
 
-import { decodeQRCode } from "./qrCodeUtils";
+import { decodeQRCode } from "../qrCodeUtils";
 
 import { Html5QrcodeScanner } from "html5-qrcode";
 import { useRef } from "react";

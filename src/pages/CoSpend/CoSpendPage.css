@@ -147,3 +147,12 @@
   color: #333;
   margin-right: 10px;
 }
+
+button{
+  color: var(--bg-black);
+  font-weight: 700;
+  height: 50px;
+  width: 100px;
+  background-color: #fff;
+  border-radius: 20px;
+}

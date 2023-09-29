@@ -9,8 +9,8 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import Modal from "react-modal";
-import app from "../firebase";
-import LoanRequestForm from "./LoanRequestForm";
+import app from "../../firebase";
+import LoanRequestForm from "../LoanRequestForm";
 import "./CoLoanPage.css";
 import parsePhoneNumber from "libphonenumber-js";
 
