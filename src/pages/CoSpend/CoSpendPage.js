@@ -466,29 +466,37 @@ const CoSpendPage = () => {
       <div className="co-spend-buttons">
         <button className="co-spend-button" onClick={handleScanAndPayClick}>
           <div>
+<<<<<<< Updated upstream
             <img src="./images/Qr code.svg" />
+=======
+            <img src="./images/Qrcode.svg" alt="QR Code" />
+>>>>>>> Stashed changes
           </div>{" "}
           Scan & Pay
         </button>
-
+  
         <button
           className="co-spend-button"
           onClick={handlePayByPhoneNumberClick}
         >
           <div>
+<<<<<<< Updated upstream
             <img src="./images/Vector.svg" />
+=======
+            <img src="./images/Phone call.svg" alt="Phone Call" />
+>>>>>>> Stashed changes
           </div>{" "}
           Pay by Phone Number
         </button>
       </div>
-
+  
       {/* Right Side */}
       <div className="co-spend-welcome">
         {showGroupImage && ( // Conditionally render the Group32.png image
           <img src="./images/Group32.png" alt="Group Image" />
         )}
         {showScanner ? (
-          currentScanStep == 0 ? (
+          currentScanStep === 0 ? (
             <div className="scanner">
               <Html5QrcodePlugin
                 fps={10}
@@ -496,16 +504,16 @@ const CoSpendPage = () => {
                 disableFlip={false}
                 qrCodeSuccessCallback={onNewScanResult}
               />
-
+  
               {decodedResults && (
                 <button onClick={() => scanNextStepHandler()}>Next</button>
               )}
-
+  
               {/* <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => handleUploadQRCode(e.target.files[0])}
-            /> */}
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleUploadQRCode(e.target.files[0])}
+              /> */}
               {uploadedQRCodeImage ? (
                 <>
                   <img src={uploadedQRCodeImage} alt="Uploaded QR Code" />
@@ -528,20 +536,7 @@ const CoSpendPage = () => {
           )
         ) : showPayByPhoneNumber ? (
           <div className="pay-by-phone">{renderPayByPhoneStep()}</div>
-        ) : selectedContact ? (
-          <>
-            <div className="contact-details">
-              <h2>Contact Information</h2>
-              <p>Name: {selectedContact.name}</p>
-              <p>Phone Number: {selectedContact.phoneNumber}</p>
-            </div>
-            <button className="pay-money-button" onClick={handleKevinClick}>
-              Select
-            </button>
-          </>
-        ) : (
-          <h1></h1>
-        )}
+        ) : null}
       </div>
     </div>
   );

@@ -28,10 +28,14 @@ const CoLoanPage = () => {
   const [totalUserAmount, setTotalUserAmount] = useState(0);
   const [users, setUsers] = useState([]);
   const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(false);
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(0);
   const [lenderName, setLenderName] = useState("");
   const [borrowerName, setBorrowerName] = useState("");
   const [duration, setDuration] = useState("");
+  const [isRightSideImageVisible, setIsRightSideImageVisible] = useState(true);
+  
+  
+
   const customStyles = {
     content: {
       top: "50%",
@@ -136,27 +140,34 @@ const CoLoanPage = () => {
     }
   };
 
-  const handleNextStep = () => {
-    setCurrentStep((prevStep) => prevStep + 1);
-  };
-
-  const handlePrevStep = () => {
-    setCurrentStep((prevStep) => prevStep - 1);
-  };
-
-  // Add onChange handlers for lenderName, borrowerName, and duration
+  
+  
   const handleLenderNameInputChange = (e) => {
     setLenderName(e.target.value);
   };
-
+  
   const handleBorrowerNameInputChange = (e) => {
     setBorrowerName(e.target.value);
   };
-
+  
   const handleDurationInputChange = (e) => {
     setDuration(e.target.value);
   };
-  const renderPayByPhoneStep = () => {
+  
+  
+  
+  
+  
+  const handleNextStep = () => {
+    setCurrentStep((prevStep) => prevStep + 1);
+  };
+  
+  const handlePrevStep = () => {
+    setCurrentStep((prevStep) => prevStep - 1);
+  };
+  
+  const renderRequestLoanWithFriendsStep = () => {
+
     switch (currentStep) {
       case 1:
         return (
@@ -183,27 +194,7 @@ const CoLoanPage = () => {
               value={totalAmount}
               onChange={handleTotalAmountInputChange}
             />
-            <label>Lender's Name:</label>
-            <input
-              type="text"
-              placeholder="Lender's Name"
-              value={lenderName}
-              onChange={handleLenderNameInputChange}
-            />
-            <label>Borrower's Name:</label>
-            <input
-              type="text"
-              placeholder="Borrower's Name"
-              value={borrowerName}
-              onChange={handleBorrowerNameInputChange}
-            />
-            <label>Duration (months):</label>
-            <input
-              type="number"
-              placeholder="Duration"
-              value={duration}
-              onChange={handleDurationInputChange}
-            />
+            <button onClick={handlePrevStep}>Previous</button>
             <button onClick={handleNextStep}>Next</button>
           </div>
         );
@@ -217,6 +208,7 @@ const CoLoanPage = () => {
               value={numUsersPooling}
               onChange={handleNumUsersPoolingChange}
             />
+            <button onClick={handlePrevStep}>Previous</button>
             <button onClick={handleNextStep}>Next</button>
           </div>
         );
@@ -265,13 +257,6 @@ const CoLoanPage = () => {
             <button className="add-users-button" onClick={handleAddUserClick}>
               Add Users
             </button>
-            <button onClick={handlePrevStep}>Previous</button>
-            <button onClick={handleNextStep}>Next</button>
-          </div>
-        );
-      case 5:
-        return (
-          <div>
             <p>Total Amount Needed to be Paid (₹): ₹{totalAmount.toFixed(2)}</p>
             <p>
               Total Amount Entered by Users (₹): ₹{totalUserAmount.toFixed(2)}
@@ -280,10 +265,14 @@ const CoLoanPage = () => {
               Amount Remaining (₹): ₹
               {(totalAmount - totalUserAmount).toFixed(2)}
             </p>
-            <button
-              className="pay-money-button"
-              onClick={handleGenerateDocument}
-            >
+            <button onClick={handlePrevStep}>Previous</button>
+            <button onClick={handleNextStep}>Next</button>
+          </div>
+        );
+      case 5:
+        return (
+          <div>
+            <button className="pay-money-button" onClick={handlePayMoneyClick}>
               Pay Money
             </button>
             <button onClick={handlePrevStep}>Previous</button>
@@ -293,7 +282,29 @@ const CoLoanPage = () => {
         return null;
     }
   };
-
+  
+  const handleSubmitLoanRequest = async () => {
+    try {
+      // Create the loan request object
+      const loanRequest = {
+        lenderName,
+        borrowerName,
+        duration,
+        totalAmount,
+        users,
+      };
+  
+      // Place your logic here to submit the loan request, e.g., sending it to a server or Firestore
+      // For example:
+      // await submitLoanRequestToServer(loanRequest);
+  
+      // Display a success message or redirect the user to a confirmation page
+      alert("Loan request submitted successfully!");
+    } catch (error) {
+      console.error("Error submitting loan request:", error);
+      alert("An error occurred while submitting the loan request.");
+    }
+  };
   const handleAddUserClick = () => {
     if (numUsersPooling > 0) {
       setUsers(
@@ -420,12 +431,20 @@ const CoLoanPage = () => {
     <div className="co-loan-container">
       {/* left side */}
       <div className="co-loan-buttons">
+<<<<<<< Updated upstream
         <button className="co-loan-button" onClick={handleLoanFormOpen}>
           Request Loan Globally
+=======
+        {/* Your "Request Loan" button */}
+        <button className="co-loan-button" onClick={handleLoanFormOpen} >
+          Request Loan
+>>>>>>> Stashed changes
         </button>
+        {/* New "Request Loan With Friends" button */}
         <button
           className="co-loan-button"
-          onClick={() => handleLoanButtonClick}
+          onClick={() => {setCurrentStep(1);
+            setIsRightSideImageVisible(false);}} // Start the process from step 1
         >
           Request Loan With Friends
         </button>
@@ -439,7 +458,11 @@ const CoLoanPage = () => {
       </div>
       {/* Right side */}
       <div className="co-loan-welcome">
-        <img src="./images/Group 10.svg" />
+  {isRightSideImageVisible && <img src="./images/Group 10.svg" />}
+</div>
+      <div className="pay-by-phone">
+      {/* Display the loan request with friends steps */}
+      {currentStep > 0 && renderRequestLoanWithFriendsStep()}
       </div>
     </div>
   );
