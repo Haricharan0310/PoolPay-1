@@ -454,7 +454,7 @@ const CoLoanPage = () => {
           <div>
             <img src="./images/hands.svg" />
           </div>
-          Request Loan With Friends
+          Request Loan from Friends
         </button>
         {showLoanForm && (
           <LoanRequestForm
