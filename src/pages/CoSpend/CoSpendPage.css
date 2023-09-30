@@ -131,8 +131,8 @@
 .add-users-button {
   background-color: #6A00FF;
   color: var(--bg-black);
-  height: 100px;
-  width: 100px;
+  height: 20px;
+  width: 150px;
   padding: 12px 24px;
   border: none;
   border-radius: 5px;
@@ -165,4 +165,7 @@ button{
   width: 100px;
   background-color: #fff;
   border-radius: 20px;
+}
+.next{
+  margin-left: 10px;
 }

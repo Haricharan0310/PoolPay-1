@@ -158,7 +158,7 @@ const CoSpendPage = () => {
               value={phoneNumberToPay}
               onChange={handlePhoneNumberInputChange}
             />
-            <button onClick={handleNextStep} disabled={!isPhoneNumberValid}>
+            <button onClick={handleNextStep} disabled={!isPhoneNumberValid} className="next">
               Next
             </button>
           </div>
@@ -173,8 +173,8 @@ const CoSpendPage = () => {
               value={totalAmount}
               onChange={handleTotalAmountInputChange}
             />
-            <button onClick={handlePrevStep}>Previous</button>
-            <button onClick={handleNextStep}>Next</button>
+             <button onClick={handlePrevStep}className="prev">Previous</button>
+            <button onClick={handleNextStep}className="next">Next</button>
           </div>
         );
       case 3:
@@ -187,8 +187,8 @@ const CoSpendPage = () => {
               value={numUsersPooling}
               onChange={handleNumUsersPoolingChange}
             />
-            <button onClick={handlePrevStep}>Previous</button>
-            <button onClick={handleNextStep}>Next</button>
+            <button onClick={handlePrevStep}className="prev">Previous</button>
+            <button onClick={handleNextStep}className="next">Next</button>
           </div>
         );
       case 4:
@@ -244,8 +244,8 @@ const CoSpendPage = () => {
               Amount Remaining (₹): ₹
               {(totalAmount - totalUserAmount).toFixed(2)}
             </p>
-            <button onClick={handlePrevStep}>Previous</button>
-            <button onClick={handleNextStep}>Next</button>
+            <button onClick={handlePrevStep}className="prev">Previous</button>
+            <button onClick={handleNextStep}className="next">Next</button>
           </div>
         );
       case 5:
@@ -254,7 +254,7 @@ const CoSpendPage = () => {
             <button className="pay-money-button" onClick={handlePayMoneyClick}>
               Pay Money
             </button>
-            <button onClick={handlePrevStep}>Previous</button>
+            <button onClick={handlePrevStep} className="prev">Previous</button>
           </div>
         );
       default:

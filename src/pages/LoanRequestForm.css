@@ -1,10 +1,47 @@
 .loan-request-form input[type="text"],
 .loan-request-form input[type="number"] {
-  width: 100%;
+  
   padding: 12px; /* Increased padding */
   margin-bottom: 16px;
   border: 1px solid #ccc;
   color: #333;
   border-radius: 4px;
   font-size: 16px;
+  
+  
+}
+.heading{
+  text-align: center;
+}
+.loan-request-form{
+  text-align: left;
+  
+}
+
+.cancel{
+  margin-left: 10px;
+  margin-top: 25px;
+}
+.submit{
+  margin-top: 30px;
+  margin-left: 125px;
+}
+.box1{
+  margin-left: 67px;
+  width:220px
+}
+.box2{
+  margin-left: 38px;
+  width:220px
+}
+.box3{
+  margin-left: 8px;
+  width:220px
+}
+.labell{
+  font-size:20px;
+}
+.heading{
+  font-size:20px;
+  margin-bottom: 30px;
 }
