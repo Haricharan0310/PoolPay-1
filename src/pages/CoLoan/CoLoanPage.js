@@ -35,8 +35,6 @@ const CoLoanPage = () => {
   const [isRightSideImageVisible, setIsRightSideImageVisible] = useState(true);
 
   const [showGlobalLoanForm, setShowGlobalLoanForm] = useState(false);
-  
-
 
   // const customStyles = {
   //   content: {
@@ -313,9 +311,10 @@ const CoLoanPage = () => {
   };
   const toggleGlobalLoanForm = () => {
     setShowGlobalLoanForm((prevShowGlobalLoanForm) => !prevShowGlobalLoanForm);
-    setIsRightSideImageVisible((prevIsRightSideImageVisible) => !prevIsRightSideImageVisible);
+    setIsRightSideImageVisible(
+      (prevIsRightSideImageVisible) => !prevIsRightSideImageVisible
+    );
   };
-  
 
   const handlePhoneNumberInputChange = (e) => {
     const newPhoneNumber = e.target.value;
@@ -436,11 +435,12 @@ const CoLoanPage = () => {
       {/* left side */}
       <div className="co-loan-buttons">
         <button
-          className={`co-loan-button ${
-            showGlobalLoanForm ? "active" : ""
-          }`}
+          className={`co-loan-button ${showGlobalLoanForm ? "active" : ""}`}
           onClick={toggleGlobalLoanForm}
         >
+          <div>
+            <img src="./images/Globe.svg" />
+          </div>
           Request Loan Globally
         </button>
         {/* New "Request Loan With Friends" button */}
@@ -451,6 +451,9 @@ const CoLoanPage = () => {
             setIsRightSideImageVisible(false);
           }}
         >
+          <div>
+            <img src="./images/hands.svg" />
+          </div>
           Request Loan With Friends
         </button>
         {showLoanForm && (
@@ -465,10 +468,10 @@ const CoLoanPage = () => {
         {isRightSideImageVisible && <img src="./images/Group 10.svg" />}
         {showGlobalLoanForm && (
           <div className="global-loan-form">
-           <LoanRequestForm
-            onSubmit={handleLoanFormSubmit}
-            onClose={handleLoanFormClose}
-          />
+            <LoanRequestForm
+              onSubmit={handleLoanFormSubmit}
+              onClose={handleLoanFormClose}
+            />
           </div>
         )}
       </div>

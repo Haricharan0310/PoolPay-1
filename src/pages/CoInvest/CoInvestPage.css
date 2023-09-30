@@ -26,11 +26,15 @@
 
 /* Individual card styles (no changes) */
 .loan-card {
-  background-color: var(--bg-black); /* Card background color */
   border: 1px solid #ccc; /* Card border */
   padding: 20px; /* Card padding */
-  border-radius: 8px; /* Card border-radius */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Card box shadow */
+  width: 268px;
+  height: 220px;
+  flex-shrink:0;
+  border-radius: 20px;
+  background: #1A1A1A;
+  text-align: fill;
 }
 
 /* Style the search bar (no changes) */
