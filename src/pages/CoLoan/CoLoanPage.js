@@ -34,6 +34,10 @@ const CoLoanPage = () => {
   const [duration, setDuration] = useState("");
   const [isRightSideImageVisible, setIsRightSideImageVisible] = useState(true);
 
+  const [showGlobalLoanForm, setShowGlobalLoanForm] = useState(false);
+  
+
+
   // const customStyles = {
   //   content: {
   //     top: "50%",
@@ -68,7 +72,7 @@ const CoLoanPage = () => {
 
     // Retrieve loan requests from Firestore, ordered by timestamp
     const q = query(
-      collection(db, "loanRequests"),
+      collection(db, "investRequests"),
       orderBy("timestamp", "desc")
     );
     const unsubscribeFirestore = onSnapshot(q, (querySnapshot) => {
@@ -105,7 +109,7 @@ const CoLoanPage = () => {
   const handleLoanFormSubmit = async (loanRequest) => {
     try {
       // Add the loan request to Firestore
-      const loanRequestsCollection = collection(db, "loanRequests");
+      const loanRequestsCollection = collection(db, "investRequests");
       await addDoc(loanRequestsCollection, {
         ...loanRequest,
         timestamp: new Date(),
@@ -307,6 +311,11 @@ const CoLoanPage = () => {
       ); // Initialize amount as "0"
     }
   };
+  const toggleGlobalLoanForm = () => {
+    setShowGlobalLoanForm((prevShowGlobalLoanForm) => !prevShowGlobalLoanForm);
+    setIsRightSideImageVisible((prevIsRightSideImageVisible) => !prevIsRightSideImageVisible);
+  };
+  
 
   const handlePhoneNumberInputChange = (e) => {
     const newPhoneNumber = e.target.value;
@@ -326,6 +335,10 @@ const CoLoanPage = () => {
     // Clear the existing user data when the number of users changes
     setUsers([]);
     setTotalUserAmount(0);
+  };
+  const handleGlobalLoanButtonClick = () => {
+    setShowGlobalLoanForm(true);
+    setIsRightSideImageVisible(false);
   };
 
   const handleUserInputChange = (index, field, value) => {
@@ -427,7 +440,7 @@ const CoLoanPage = () => {
         </button>
         {/* New "Request Loan With Friends" button */}
         <button
-          className="co-spend-button"
+          className="co-spend-button co-loan-button"
           onClick={() => {
             setCurrentStep(1);
             setIsRightSideImageVisible(false);
@@ -435,7 +448,6 @@ const CoLoanPage = () => {
         >
           Request Loan With Friends
         </button>
-
         {showLoanForm && (
           <LoanRequestForm
             onSubmit={handleLoanFormSubmit}
@@ -446,6 +458,14 @@ const CoLoanPage = () => {
       {/* Right side */}
       <div className="co-spend-welcome">
         {isRightSideImageVisible && <img src="./images/Group 10.svg" />}
+        {showGlobalLoanForm && (
+          <div className="global-loan-form">
+            <LoanRequestForm
+              onSubmit={handleLoanFormSubmit}
+              onClose={handleLoanFormClose}
+            />
+          </div>
+        )}
       </div>
       <div className="pay-by-phone">
         {/* Display the loan request with friends steps */}
@@ -453,6 +473,5 @@ const CoLoanPage = () => {
       </div>
     </div>
   );
-};
-
+        }  
 export default CoLoanPage;
