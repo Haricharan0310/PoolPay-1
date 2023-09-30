@@ -33,24 +33,22 @@ const CoLoanPage = () => {
   const [borrowerName, setBorrowerName] = useState("");
   const [duration, setDuration] = useState("");
   const [isRightSideImageVisible, setIsRightSideImageVisible] = useState(true);
-  
-  
 
-  const customStyles = {
-    content: {
-      top: "50%",
-      left: "50%",
-      right: "auto",
-      bottom: "auto",
-      marginRight: "-50%",
-      transform: "translate(-50%, -50%)",
-      backgroundColor: "white",
-      color: "black",
-      width: 400,
-      maxHeight: "calc(100vh-210px)",
-      overflowY: "auto",
-    },
-  };
+  // const customStyles = {
+  //   content: {
+  //     top: "50%",
+  //     left: "50%",
+  //     right: "auto",
+  //     bottom: "auto",
+  //     marginRight: "-50%",
+  //     transform: "translate(-50%, -50%)",
+  //     backgroundColor: "white",
+  //     color: "black",
+  //     width: 400,
+  //     maxHeight: "calc(100vh-210px)",
+  //     overflowY: "auto",
+  //   },
+  // };
 
   useEffect(() => {
     // Calculate the totalUserAmount (sum of userAmounts)
@@ -140,34 +138,27 @@ const CoLoanPage = () => {
     }
   };
 
-  
-  
   const handleLenderNameInputChange = (e) => {
     setLenderName(e.target.value);
   };
-  
+
   const handleBorrowerNameInputChange = (e) => {
     setBorrowerName(e.target.value);
   };
-  
+
   const handleDurationInputChange = (e) => {
     setDuration(e.target.value);
   };
-  
-  
-  
-  
-  
+
   const handleNextStep = () => {
     setCurrentStep((prevStep) => prevStep + 1);
   };
-  
+
   const handlePrevStep = () => {
     setCurrentStep((prevStep) => prevStep - 1);
   };
-  
-  const renderRequestLoanWithFriendsStep = () => {
 
+  const renderRequestLoanWithFriendsStep = () => {
     switch (currentStep) {
       case 1:
         return (
@@ -282,7 +273,7 @@ const CoLoanPage = () => {
         return null;
     }
   };
-  
+
   const handleSubmitLoanRequest = async () => {
     try {
       // Create the loan request object
@@ -293,11 +284,11 @@ const CoLoanPage = () => {
         totalAmount,
         users,
       };
-  
+
       // Place your logic here to submit the loan request, e.g., sending it to a server or Firestore
       // For example:
       // await submitLoanRequestToServer(loanRequest);
-  
+
       // Display a success message or redirect the user to a confirmation page
       alert("Loan request submitted successfully!");
     } catch (error) {
@@ -428,17 +419,19 @@ const CoLoanPage = () => {
   };
 
   return (
-    <div className="co-loan-container">
+    <div className="co-spend-container">
       {/* left side */}
-      <div className="co-loan-buttons">
-        <button className="co-loan-button" onClick={handleLoanFormOpen}>
+      <div className="co-spend-buttons">
+        <button className="co-spend-button" onClick={handleLoanFormOpen}>
           Request Loan Globally
         </button>
         {/* New "Request Loan With Friends" button */}
         <button
-          className="co-loan-button"
-          onClick={() => {setCurrentStep(1);
-            setIsRightSideImageVisible(false);}} // Start the process from step 1
+          className="co-spend-button"
+          onClick={() => {
+            setCurrentStep(1);
+            setIsRightSideImageVisible(false);
+          }} // Start the process from step 1
         >
           Request Loan With Friends
         </button>
@@ -451,12 +444,12 @@ const CoLoanPage = () => {
         )}
       </div>
       {/* Right side */}
-      <div className="co-loan-welcome">
-  {isRightSideImageVisible && <img src="./images/Group 10.svg" />}
-</div>
+      <div className="co-spend-welcome">
+        {isRightSideImageVisible && <img src="./images/Group 10.svg" />}
+      </div>
       <div className="pay-by-phone">
-      {/* Display the loan request with friends steps */}
-      {currentStep > 0 && renderRequestLoanWithFriendsStep()}
+        {/* Display the loan request with friends steps */}
+        {currentStep > 0 && renderRequestLoanWithFriendsStep()}
       </div>
     </div>
   );

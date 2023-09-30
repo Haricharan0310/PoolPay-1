@@ -1,15 +1,16 @@
-/* CSS */
-.co-loan-container {
+/* Container for the CoSpendPage */
+.co-spend-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   min-height: 100vh; /* Change height to min-height */
   background-color: var(--bg-black);
   color: var(--white);
+  text-align: center;
 }
 
 /* Left side with buttons */
-.co-loan-buttons {
+.co-spend-buttons {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -22,7 +23,7 @@
   color: var(--white);
 }
 
-.co-loan-button {
+.co-spend-button {
   width: 313px;
   height: 299px;
   flex-shrink: 0;
@@ -36,23 +37,27 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  color: var(--white);
   align-items: center;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  color: var(--white);
 }
 
-.co-loan-button:hover {
+.co-spend-button svg {
+  fill: white; /* Set the fill color to white */
+}
+
+.co-spend-button:hover {
   background-color: #4a0080;
   transform: scale(1.05); /* Add a slight scale effect on hover */
 }
 
-.co-loan-buttons .selected {
+.co-spend-buttons .selected {
   background-color: #4a0080;
 }
 
 /* Right side with content */
-.co-loan-welcome {
+.co-spend-welcome {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -64,12 +69,26 @@
   overflow-y: auto;
 }
 
-.co-loan-welcome h1 {
+.co-spend-welcome h1 {
   font-size: 28px; /* Increased font size */
   font-weight: bold;
   color: #333;
   margin-bottom: 20px; /* Add some spacing below the heading */
 }
+
+.contact-details h2 {
+  font-size: 20px;
+  font-weight: bold;
+  color: #6A00FF;
+  margin-top: 0; /* Remove default top margin */
+}
+
+.contact-details p {
+  font-size: 16px;
+  color: #333;
+}
+
+/* Styling for pay money button */
 .pay-money-button {
   background-color: #6A00FF;
   color: #fff;
@@ -97,6 +116,7 @@
   font-weight: bold;
   margin-bottom: 6px;
   display: block;
+  align-items: center;
 }
 
 .pay-by-phone input[type="text"],
@@ -148,6 +168,3 @@ button{
   background-color: #fff;
   border-radius: 20px;
 }
-
-
-
