@@ -34,6 +34,9 @@
   /* Style the search bar */
 .search-bar {
   margin-bottom: 20px; /* Add some spacing below the search bar */
+  width: 1106px;
+height: 64px;
+flex-shrink: 0;
 }
 
 .search-bar input {
