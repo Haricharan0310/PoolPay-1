@@ -1,5 +1,5 @@
-/* Container for the CoSpendPage */
-.co-spend-container {
+/* Container for the ColoanPage */
+.co-loan-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -10,7 +10,7 @@
 }
 
 /* Left side with buttons */
-.co-spend-buttons {
+.co-loan-buttons {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -23,7 +23,7 @@
   color: var(--white);
 }
 
-.co-spend-button {
+.co-loan-button {
   width: 313px;
   height: 299px;
   flex-shrink: 0;
@@ -43,21 +43,21 @@
   color: var(--white);
 }
 
-.co-spend-button svg {
+.co-loan-button svg {
   fill: white; /* Set the fill color to white */
 }
 
-.co-spend-button:hover {
+.co-loan-button:hover {
   background-color: #4a0080;
   transform: scale(1.05); /* Add a slight scale effect on hover */
 }
 
-.co-spend-buttons .selected {
+.co-loan-buttons .selected {
   background-color: #4a0080;
 }
 
 /* Right side with content */
-.co-spend-welcome {
+.co-loan-welcome {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -69,7 +69,7 @@
   overflow-y: auto;
 }
 
-.co-spend-welcome h1 {
+.co-loan-welcome h1 {
   font-size: 28px; /* Increased font size */
   font-weight: bold;
   color: #333;
@@ -168,3 +168,11 @@ button{
   background-color: #fff;
   border-radius: 20px;
 }
+/* CSS classes for the right side image and global loan form */
+.co-loan-welcome {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Hide the right side image when isRightSideImageVisible is false */
