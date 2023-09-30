@@ -35,32 +35,32 @@ const LoanRequestForm = ({ onSubmit, onClose }) => {
 
   return (
     <div className="loan-request-form">
-      <h3>Loan Request Form</h3>
-      <div>
-        <label>User:</label>
-        <input
+      <h2 className="heading">Loan Request Form</h2>
+      <div >
+        <label className="labell">User :</label>
+        <input className="box1"
           type="text"
           value={user}
           onChange={(e) => setUser(e.target.value)}
         />
       </div>
       <div>
-        <label>Amount:</label>
-        <input
+        <label className="labell">Amount :</label>
+        <input className="box2"
           type="number"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
       </div>
       <div>
-        <label>Additional Info:</label>
-        <textarea
+        <label className="labell">Information :</label>
+        <textarea className="box3"
           value={info}
           onChange={(e) => setInfo(e.target.value)}
         />
       </div>
-      <button onClick={handleSubmit}>Submit Request</button>
-      <button onClick={onClose}>Cancel</button>
+      <button onClick={handleSubmit}className="submit">Submit</button>
+      <button onClick={onClose}className="cancel">Cancel</button>
     </div>
   );
 };
