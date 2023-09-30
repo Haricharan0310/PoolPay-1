@@ -10,6 +10,9 @@
   border-radius: 8px; /* Add rounded corners to create a card effect */
   box-shadow: 20px 20px 20px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
   margin: 0 auto;
+  max-width: 90%;
+  margin-top: 5%;
+  max-height: 80%;
 }
 
   
@@ -27,4 +30,31 @@
     border-radius: 8px; /* Card border-radius */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Card box shadow */
   }
+
+  /* Style the search bar */
+.search-bar {
+  margin-bottom: 20px; /* Add some spacing below the search bar */
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+  color: #000000; /* Remove the default input focus outline */
+}
+
+/* Style the search bar placeholder text */
+.search-bar input::placeholder {
+  color: #000000; /* Adjust the placeholder text color */
+}
+
+/* Style the search bar on focus */
+.search-bar input:focus {
+  border-color: #6a00ff; /* Change the border color on focus */
+  box-shadow: 0 0 5px rgba(106, 0, 255, 0.5); /* Add a subtle box shadow on focus */
+}
+
   
