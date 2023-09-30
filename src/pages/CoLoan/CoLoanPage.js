@@ -465,7 +465,7 @@ const CoLoanPage = () => {
         {isRightSideImageVisible && <img src="./images/Group 10.svg" />}
         {showGlobalLoanForm && (
           <div className="global-loan-form">
-           <LoanRequestForm
+            <LoanRequestForm
             onSubmit={handleLoanFormSubmit}
             onClose={handleLoanFormClose}
           />
