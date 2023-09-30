@@ -476,7 +476,7 @@ const CoSpendPage = () => {
           onClick={handlePayByPhoneNumberClick}
         >
           <div>
-            <img src="./images/Phone call.svg" />
+            <img src="./images/Vector.svg" />
           </div>{" "}
           Pay by Phone Number
         </button>
