@@ -174,5 +174,15 @@ button{
   align-items: center;
   justify-content: center;
 }
+.pay-by-phone input[type="text"],
+.pay-by-phone input[type="number"] {
+  width: 100%;
+  padding: 12px; /* Increased padding */
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  color: #333;
+  border-radius: 4px;
+  font-size: 16px;
+}
 
 /* Hide the right side image when isRightSideImageVisible is false */
