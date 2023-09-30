@@ -19,9 +19,13 @@
     "react-dom": "^18.2.0",
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.15.0",
+<<<<<<< Updated upstream
     "react-scripts": "5.0.1",
     "tailwindcss": "^3.3.3",
     "validator": "^13.11.0",
+=======
+    "react-scripts": "^5.0.1",
+>>>>>>> Stashed changes
     "web-vitals": "^2.1.4"
   },
   "scripts": {
