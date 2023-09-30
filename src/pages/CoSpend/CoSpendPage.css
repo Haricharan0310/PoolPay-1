@@ -87,6 +87,8 @@
   color: #fff;
   padding: 12px 24px;
   border: none;
+  height: 70px;
+  width: 150px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 18px; /* Slightly increased font size */
@@ -123,6 +125,8 @@
 .add-users-button {
   background-color: #6A00FF;
   color: var(--bg-black);
+  height: 100px;
+  width: 100px;
   padding: 12px 24px;
   border: none;
   border-radius: 5px;
