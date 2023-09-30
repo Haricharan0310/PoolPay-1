@@ -25,7 +25,7 @@
 }
 
 /* Individual card styles (no changes) */
-.loan-card {
+.loan-card{
   border: 1px solid #ccc; /* Card border */
   padding: 20px; /* Card padding */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Card box shadow */
@@ -45,7 +45,7 @@
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  background-color: #ffffff; /* Set the background color of the search bar */
+  background-color: #000000; /* Set the background color of the search bar */
   border: 1px solid #ccc;
   border-radius: 5px;
   padding: 5px;/* Add some spacing below the search bar */

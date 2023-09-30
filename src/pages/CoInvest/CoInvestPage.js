@@ -446,48 +446,80 @@ const CoInvestPage = () => {
     <div className="co-invest-container">
       {/* Search Bar */}
       <div className="search-bar">
+        <img
+          className="search-icon"
+          src="./images/searchsvg.svg"
+          alt="Search Icon"
+        />
+
         <input
           type="text"
           placeholder="Search for a user..."
           value={searchTerm}
           onChange={handleSearch}
         />
-        <img
-          className="search-icon"
-          src="./images/searchsvg.svg"
-          alt="Search Icon"
-        />
       </div>
 
       <div className="co-loan-dashboard">
-        {/* Display filtered loan requests as cards */}
-        {filteredInvestRequests.map((request) => (
-          <div key={request.id} className="loan-card">
-            {/* Card content */}
-            <div className="card-content">
-              <strong>User:</strong> {request.user}
-              <br />
-              <strong>Amount:</strong> {request.amount}
-              <br />
-              <strong>Info:</strong> {request.info}
-              <br />
-              <button onClick={() => handleInvestButtonClick(request)}>
-                Invest
-              </button>{" "}
-            </div>
-            {/* Loan button */}
-            {showAmountForm && (
-              <Modal
-                isOpen={showAmountForm}
-                onRequestClose={() => setShowAmountForm(false)}
-                style={customStyles}
-              >
-                <div className="pay-by-phone">{renderPayByPhoneStep()}</div>
-                <button onClick={() => setShowAmountForm(false)}>Close</button>
-              </Modal>
-            )}
-          </div>
-        ))}
+        {searchTerm === ""
+          ? investRequests.map((request) => (
+              <div key={request.id} className="loan-card">
+                {/* Card content */}
+                <div className="card-content">
+                  <strong>User:</strong> {request.user}
+                  <br />
+                  <strong>Amount:</strong> {request.amount}
+                  <br />
+                  <strong>Info:</strong> {request.info}
+                  <br />
+                  <button onClick={() => handleInvestButtonClick(request)}>
+                    Invest
+                  </button>{" "}
+                </div>
+                {/* Loan button */}
+                {showAmountForm && (
+                  <Modal
+                    isOpen={showAmountForm}
+                    onRequestClose={() => setShowAmountForm(false)}
+                    style={customStyles}
+                  >
+                    <div className="pay-by-phone">{renderPayByPhoneStep()}</div>
+                    <button onClick={() => setShowAmountForm(false)}>
+                      Close
+                    </button>
+                  </Modal>
+                )}
+              </div>
+            ))
+          : filteredInvestRequests.map((request) => (
+              <div key={request.id} className="loan-card">
+                {/* Card content */}
+                <div className="card-content">
+                  <strong>User:</strong> {request.user}
+                  <br />
+                  <strong>Amount:</strong> {request.amount}
+                  <br />
+                  <strong>Info:</strong> {request.info}
+                  <br />
+                  <button onClick={() => handleInvestButtonClick(request)}>
+                    Invest
+                  </button>{" "}
+                </div>
+                {/* Loan button */}
+                {showAmountForm && (
+                  <Modal
+                    isOpen={showAmountForm}
+                    onRequestClose={() => setShowAmountForm(false)}
+                    style={customStyles}
+                  >
+                    <div className="pay-by-phone">{renderPayByPhoneStep()}</div>
+                    <button onClick={() => setShowAmountForm(false)}>
+                      Close
+                    </button>
+                  </Modal>
+                )}
+              </div>
+            ))}
       </div>
     </div>
   );
