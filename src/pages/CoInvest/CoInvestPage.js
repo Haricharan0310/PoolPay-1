@@ -19,6 +19,13 @@ const db = getFirestore(app);
 
 const CoInvestPage = () => {
   // Remove the parameter here
+  const profilePictures = [
+    "./images/img1.svg",
+    "./images/img2.svg",
+    "./images/img3.svg",
+    "./images/img4.svg",
+    "./images/img5.svg",
+  ];
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredInvestRequests, setFilteredInvestRequests] = useState([]);
 
@@ -444,14 +451,12 @@ const CoInvestPage = () => {
 
   return (
     <div className="co-invest-container">
-      {/* Search Bar */}
       <div className="search-bar">
         <img
           className="search-icon"
           src="./images/searchsvg.svg"
           alt="Search Icon"
         />
-
         <input
           type="text"
           placeholder="Search for a user..."
@@ -464,19 +469,32 @@ const CoInvestPage = () => {
         {searchTerm === ""
           ? investRequests.map((request) => (
               <div key={request.id} className="loan-card">
-                {/* Card content */}
-                <div className="card-content">
-                  <strong>User:</strong> {request.user}
-                  <br />
-                  <strong>Amount:</strong> {request.amount}
-                  <br />
-                  <strong>Info:</strong> {request.info}
-                  <br />
-                  <button onClick={() => handleInvestButtonClick(request)}>
-                    Invest
-                  </button>{" "}
+                <div className="profile-info">
+                  <div className="profile-picture">
+                    <img
+                      src={
+                        profilePictures[
+                          Math.floor(Math.random() * profilePictures.length)
+                        ]
+                      }
+                      alt="Profile"
+                    />
+                  </div>
+                  <div className="user-info">
+                    <strong className="username">{request.user}</strong>
+                    <p className="info">{request.info}</p>
+                  </div>
                 </div>
-                {/* Loan button */}
+
+                <div className="amount">
+                  <strong className="amount-label">Amount:</strong>
+                  <span className="amount-value">{request.amount}</span>
+                </div>
+
+                <button onClick={() => handleInvestButtonClick(request)}>
+                  Invest
+                </button>
+
                 {showAmountForm && (
                   <Modal
                     isOpen={showAmountForm}
@@ -493,19 +511,32 @@ const CoInvestPage = () => {
             ))
           : filteredInvestRequests.map((request) => (
               <div key={request.id} className="loan-card">
-                {/* Card content */}
-                <div className="card-content">
-                  <strong>User:</strong> {request.user}
-                  <br />
-                  <strong>Amount:</strong> {request.amount}
-                  <br />
-                  <strong>Info:</strong> {request.info}
-                  <br />
-                  <button onClick={() => handleInvestButtonClick(request)}>
-                    Invest
-                  </button>{" "}
+                <div className="profile-info">
+                  <div className="profile-picture">
+                    <img
+                      src={
+                        profilePictures[
+                          Math.floor(Math.random() * profilePictures.length)
+                        ]
+                      }
+                      alt="Profile"
+                    />
+                  </div>
+                  <div className="user-info">
+                    <strong className="username">{request.user}</strong>
+                    <p className="info">{request.info}</p>
+                  </div>
                 </div>
-                {/* Loan button */}
+
+                <div className="amount">
+                  <strong className="amount-label">Amount:</strong>
+                  <span className="amount-value">{request.amount}</span>
+                </div>
+
+                <button onClick={() => handleInvestButtonClick(request)}>
+                  Invest
+                </button>
+
                 {showAmountForm && (
                   <Modal
                     isOpen={showAmountForm}
@@ -524,5 +555,4 @@ const CoInvestPage = () => {
     </div>
   );
 };
-
 export default CoInvestPage;
