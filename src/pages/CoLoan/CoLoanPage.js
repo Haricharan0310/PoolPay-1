@@ -432,19 +432,24 @@ const CoLoanPage = () => {
   };
 
   return (
-    <div className="co-spend-container">
+    <div className="co-loan-container">
       {/* left side */}
-      <div className="co-spend-buttons">
-        <button className="co-spend-button" onClick={handleLoanFormOpen}>
+      <div className="co-loan-buttons">
+        <button
+          className={`co-loan-button ${
+            showGlobalLoanForm ? "active" : ""
+          }`}
+          onClick={toggleGlobalLoanForm}
+        >
           Request Loan Globally
         </button>
         {/* New "Request Loan With Friends" button */}
         <button
-          className="co-spend-button co-loan-button"
+          className="co-loan-button"
           onClick={() => {
             setCurrentStep(1);
             setIsRightSideImageVisible(false);
-          }} // Start the process from step 1
+          }}
         >
           Request Loan With Friends
         </button>
@@ -456,14 +461,14 @@ const CoLoanPage = () => {
         )}
       </div>
       {/* Right side */}
-      <div className="co-spend-welcome">
+      <div className="co-loan-welcome">
         {isRightSideImageVisible && <img src="./images/Group 10.svg" />}
         {showGlobalLoanForm && (
           <div className="global-loan-form">
             <LoanRequestForm
-              onSubmit={handleLoanFormSubmit}
-              onClose={handleLoanFormClose}
-            />
+            onSubmit={handleLoanFormSubmit}
+            onClose={handleLoanFormClose}
+          />
           </div>
         )}
       </div>
@@ -473,5 +478,6 @@ const CoLoanPage = () => {
       </div>
     </div>
   );
-        }  
+};
+
 export default CoLoanPage;

@@ -1,6 +1,4 @@
-/* Apply these styles to the parent container, such as the body or a wrapper div */
-
-
+/* Container styles */
 .co-invest-container {
   display: flex;
   flex-direction: column;
@@ -12,26 +10,30 @@
   margin: 0 auto;
   max-width: 90%;
   margin-top: 5%;
-  max-height: 80%;
+  max-height: 80vh; /* Limit the maximum height */
+  overflow-y: auto; /* Add vertical scroll when content exceeds the height */
 }
 
-  
-  .co-loan-dashboard {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* Create four columns */
-    gap: 20px; /* Adjust the gap between cards */
-    padding: 0%;
-  }
-  
-  .loan-card {
-    background-color: var(--bg-black); /* Card background color */
-    border: 1px solid #ccc; /* Card border */
-    padding: 20px; /* Card padding */
-    border-radius: 8px; /* Card border-radius */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Card box shadow */
-  }
+/* Card grid styles */
+.co-loan-dashboard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Create four columns */
+  gap: 20px; /* Adjust the gap between cards */
+  padding: 0%;
+  max-height: 100%; /* Limit the maximum height of the card grid */
+  overflow-y: auto; /* Add vertical scroll when content exceeds the height */
+}
 
-  /* Style the search bar */
+/* Individual card styles (no changes) */
+.loan-card {
+  background-color: var(--bg-black); /* Card background color */
+  border: 1px solid #ccc; /* Card border */
+  padding: 20px; /* Card padding */
+  border-radius: 8px; /* Card border-radius */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Card box shadow */
+}
+
+/* Style the search bar (no changes) */
 .search-bar {
   margin-bottom: 20px; /* Add some spacing below the search bar */
   width: 1106px;
@@ -49,15 +51,13 @@ flex-shrink: 0;
   color: #000000; /* Remove the default input focus outline */
 }
 
-/* Style the search bar placeholder text */
+/* Style the search bar placeholder text (no changes) */
 .search-bar input::placeholder {
   color: #000000; /* Adjust the placeholder text color */
 }
 
-/* Style the search bar on focus */
+/* Style the search bar on focus (no changes) */
 .search-bar input:focus {
   border-color: #6a00ff; /* Change the border color on focus */
   box-shadow: 0 0 5px rgba(106, 0, 255, 0.5); /* Add a subtle box shadow on focus */
 }
-
-  
