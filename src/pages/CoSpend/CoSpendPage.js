@@ -76,6 +76,7 @@ const CoSpendPage = () => {
   const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(false);
 
   const [decodedResults, setDecodedResults] = useState(null);
+  
 
   useEffect(() => {
     // Calculate the totalUserAmount (sum of userAmounts)
@@ -173,6 +174,7 @@ const CoSpendPage = () => {
               value={totalAmount}
               onChange={handleTotalAmountInputChange}
             />
+            <button onClick={handlePrevStep}>Previous</button>
             <button onClick={handleNextStep}>Next</button>
           </div>
         );
@@ -186,6 +188,7 @@ const CoSpendPage = () => {
               value={numUsersPooling}
               onChange={handleNumUsersPoolingChange}
             />
+            <button onClick={handlePrevStep}>Previous</button>
             <button onClick={handleNextStep}>Next</button>
           </div>
         );
@@ -398,6 +401,7 @@ const CoSpendPage = () => {
     setPhoneNumberToPay("");
     setNumUsersPooling(0);
     setTotalUserAmount(0);
+    setShowGroupImage(false);
   };
 
   const handlePayMoneyClick = () => {
