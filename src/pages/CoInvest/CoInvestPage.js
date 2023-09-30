@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import {
   getFirestore,
@@ -10,20 +11,30 @@ import {
 } from "firebase/firestore";
 import Modal from "react-modal";
 import app from "../../firebase";
-import LoanRequestForm from "../LoanRequestForm";
-import "../CoLoan/CoLoanPage.css"; // Import your CSS file for styling
+import "../CoInvest/CoInvestPage.css"; // Import your CSS file for styling
 import parsePhoneNumber from "libphonenumber-js";
-import Docxtemplater from "docxtemplater";
-import PizZip from "pizzip";
-import { saveAs } from "file-saver";
 
 const auth = getAuth(app);
 const db = getFirestore(app);
 
 const CoInvestPage = () => {
+  // Remove the parameter here
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredInvestRequests, setFilteredInvestRequests] = useState([]);
+
+  const handleSearch = (e) => {
+    const newSearchTerm = e.target.value;
+    setSearchTerm(newSearchTerm);
+
+    // Filter the investRequests based on the search term
+    const filtered = investRequests.filter((request) =>
+      request.user.toLowerCase().includes(newSearchTerm.toLowerCase())
+    );
+
+    setFilteredInvestRequests(filtered);
+  };
   const [user, setUser] = useState(null);
   const [investRequests, setInvestRequests] = useState([]);
-  const [showLoanForm, setShowLoanForm] = useState(false);
   const [showInvestForm, setShowInvestForm] = useState(false);
   const [showAmountForm, setShowAmountForm] = useState(false);
   const [phoneNumberToPay, setPhoneNumberToPay] = useState("");
@@ -432,30 +443,22 @@ const CoInvestPage = () => {
   };
 
   return (
-    <div className="co-loan-container">
-      <div className="co-loan-welcome">
-        <button onClick={handleInvestFormOpen}>Request Investment</button>
-
-        {showInvestForm && (
-          <Modal
-          isOpen={showInvestForm}
-          onRequestClose={() => setShowInvestForm(false)}
-          style={customStyles}
-        >
-          <div className="request-investment">{<LoanRequestForm
-            onSubmit={handleInvestFormSubmit}
-            onClose={handleInvestFormClose}
-          />}</div>
-
-          {/* <button onClick={() => setShowInvestForm(false)}>Close</button> */}
-        </Modal>
-          
-        )}
+    <div className="co-invest-container">
+      {/* Search Bar */}
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Search for a user..."
+          value={searchTerm}
+          onChange={handleSearch}
+        />
       </div>
+
       <div className="co-loan-dashboard">
-        {/* Display loan requests as cards */}
-        {investRequests.map((request) => (
+        {/* Display filtered loan requests as cards */}
+        {filteredInvestRequests.map((request) => (
           <div key={request.id} className="loan-card">
+            {/* Card content */}
             <div className="card-content">
               <strong>User:</strong> {request.user}
               <br />
@@ -463,10 +466,10 @@ const CoInvestPage = () => {
               <br />
               <strong>Info:</strong> {request.info}
               <br />
+              <button onClick={() => handleInvestButtonClick(request)}>
+                Invest
+              </button>{" "}
             </div>
-            <button onClick={() => handleInvestButtonClick(request)}>
-              Invest
-            </button>{" "}
             {/* Loan button */}
             {showAmountForm && (
               <Modal
@@ -475,7 +478,6 @@ const CoInvestPage = () => {
                 style={customStyles}
               >
                 <div className="pay-by-phone">{renderPayByPhoneStep()}</div>
-
                 <button onClick={() => setShowAmountForm(false)}>Close</button>
               </Modal>
             )}

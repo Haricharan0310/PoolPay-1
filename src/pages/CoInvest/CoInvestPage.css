@@ -1,32 +1,30 @@
+/* Apply these styles to the parent container, such as the body or a wrapper div */
+
+
 .co-invest-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px; /* Adjust padding as needed */
+  background-color: #6a00ff; /* Set the desired background color */
+  border-radius: 8px; /* Add rounded corners to create a card effect */
+  box-shadow: 20px 20px 20px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+  margin: 0 auto;
+}
+
+  
+  .co-loan-dashboard {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Create four columns */
+    gap: 20px; /* Adjust the gap between cards */
+    padding: 0%;
   }
   
-  .search-bar {
-    margin-bottom: 20px;
-  }
-  
-  .stock-table {
-    width: 80%;
-    max-width: 800px;
-  }
-  
-  .stock-table table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .stock-table th,
-  .stock-table td {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: center;
-  }
-  
-  .request-friend-button {
-    margin-top: 20px;
+  .loan-card {
+    background-color: var(--bg-black); /* Card background color */
+    border: 1px solid #ccc; /* Card border */
+    padding: 20px; /* Card padding */
+    border-radius: 8px; /* Card border-radius */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Card box shadow */
   }
   
