@@ -466,11 +466,7 @@ const CoSpendPage = () => {
       <div className="co-spend-buttons">
         <button className="co-spend-button" onClick={handleScanAndPayClick}>
           <div>
-<<<<<<< Updated upstream
             <img src="./images/Qr code.svg" />
-=======
-            <img src="./images/Qrcode.svg" alt="QR Code" />
->>>>>>> Stashed changes
           </div>{" "}
           Scan & Pay
         </button>
@@ -480,11 +476,7 @@ const CoSpendPage = () => {
           onClick={handlePayByPhoneNumberClick}
         >
           <div>
-<<<<<<< Updated upstream
             <img src="./images/Vector.svg" />
-=======
-            <img src="./images/Phone call.svg" alt="Phone Call" />
->>>>>>> Stashed changes
           </div>{" "}
           Pay by Phone Number
         </button>

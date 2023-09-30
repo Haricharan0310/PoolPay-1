@@ -431,14 +431,8 @@ const CoLoanPage = () => {
     <div className="co-loan-container">
       {/* left side */}
       <div className="co-loan-buttons">
-<<<<<<< Updated upstream
         <button className="co-loan-button" onClick={handleLoanFormOpen}>
           Request Loan Globally
-=======
-        {/* Your "Request Loan" button */}
-        <button className="co-loan-button" onClick={handleLoanFormOpen} >
-          Request Loan
->>>>>>> Stashed changes
         </button>
         {/* New "Request Loan With Friends" button */}
         <button
