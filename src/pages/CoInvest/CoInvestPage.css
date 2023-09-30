@@ -122,13 +122,13 @@
 }
 
 /* Profile picture styles */
-.profile-picture {
-  width: 80px;
-  height: 80px;
+.profile-picturee {
+  width: 100px;
+  height: 100px;
   margin-right: 10px;
 }
 
-.profile-picture img {
+.profile-picturee img {
   width: 80%;
   height: 80%;
   border-radius: 50%;

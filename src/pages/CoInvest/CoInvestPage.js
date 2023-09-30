@@ -470,7 +470,7 @@ const CoInvestPage = () => {
           ? investRequests.map((request) => (
               <div key={request.id} className="loan-card">
                 <div className="profile-info">
-                  <div className="profile-picture">
+                  <div className="profile-picturee">
                     <img
                       src={
                         profilePictures[
@@ -512,7 +512,7 @@ const CoInvestPage = () => {
           : filteredInvestRequests.map((request) => (
               <div key={request.id} className="loan-card">
                 <div className="profile-info">
-                  <div className="profile-picture">
+                  <div className="profile-picturee">
                     <img
                       src={
                         profilePictures[

@@ -159,7 +159,7 @@
 }
 
 button{
-  color: var(--bg-black);
+  color: black;
   font-weight: 700;
   height: 50px;
   width: 100px;
