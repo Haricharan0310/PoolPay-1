@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./LoanRequestForm.css";
 
 const LoanRequestForm = ({ onSubmit, onClose }) => {
   const [user, setUser] = useState("");
@@ -11,6 +12,7 @@ const LoanRequestForm = ({ onSubmit, onClose }) => {
       alert("Please enter valid user and amount.");
       return;
     }
+    
 
     // Create a loan request object
     const loanRequest = {

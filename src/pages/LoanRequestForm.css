@@ -1,0 +1,10 @@
+.loan-request-form input[type="text"],
+.loan-request-form input[type="number"] {
+  width: 100%;
+  padding: 12px; /* Increased padding */
+  margin-bottom: 16px;
+  border: 1px solid #ccc;
+  color: #333;
+  border-radius: 4px;
+  font-size: 16px;
+}
