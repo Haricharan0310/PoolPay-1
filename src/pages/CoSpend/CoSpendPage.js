@@ -76,7 +76,6 @@ const CoSpendPage = () => {
   const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(false);
 
   const [decodedResults, setDecodedResults] = useState(null);
-  
 
   useEffect(() => {
     // Calculate the totalUserAmount (sum of userAmounts)
@@ -467,7 +466,7 @@ const CoSpendPage = () => {
       <div className="co-spend-buttons">
         <button className="co-spend-button" onClick={handleScanAndPayClick}>
           <div>
-            <img src="./images/Qrcode.svg" />
+            <img src="./images/Qr code.svg" />
           </div>{" "}
           Scan & Pay
         </button>

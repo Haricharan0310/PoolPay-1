@@ -421,7 +421,7 @@ const CoLoanPage = () => {
       {/* left side */}
       <div className="co-loan-buttons">
         <button className="co-loan-button" onClick={handleLoanFormOpen}>
-          Request Loan
+          Request Loan Globally
         </button>
         <button
           className="co-loan-button"
