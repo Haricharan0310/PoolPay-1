@@ -361,31 +361,51 @@ const CoInvestPage = () => {
     <html>
       <head>
         <title>Lending Agreement</title>
+        <style>
+        div{
+          text-align:left;
+          padding-left:100px;
+          padding-right:100px;
+        }
+    body {
+      text-align:center;
+      align-items: center;
+      height: 100vh; /* 100% viewport height for vertical centering */
+      margin: 0; /* Remove default margin for horizontal centering */
+    }
+    .highlight-placeholder {
+      font-weight: bold; /* Change the background color to your preference */
+    }
+    .size{
+      font-size:22px;
+    }
+    /* Add any additional CSS styles as needed */
+  </style>
       </head>
       <body>
         <h1>DRAFT OF LENDING AGREEMENT</h1>
         <p>LENDING AGREEMENT BETWEEN</p>
-        <p>${lenderName}</p>
+        <p><span class="highlight-placeholder size">${lenderName}</span></p>
         <p>AND</p>
-        <p>${borrowerName}</p>
-        <p>THIS AGREEMENT made BETWEEN ${lenderName} hereinafter called "the Lender" AND ${borrowerName} hereinafter called "the Borrower" and reference to the parties hereto shall mean and include their respective heirs, executors, administrators and assigns;</p>
-        <p>WHEREAS the Borrower is in need of funds and hence has approached the Lender to grant him/her an interest-free loan of Rs.${totalAmount}/- for a period of ${duration}</p>
-        <p>AND WHEREAS the Lender has agreed to grant a loan to the Borrower, with an interest of ${interest}%;</p>
+        <p><span class="highlight-placeholder size">${borrowerName}</span></p>
+        <p>THIS AGREEMENT made BETWEEN <span class="highlight-placeholder">${lenderName} </span> hereinafter called "the Lender" AND <span class="highlight-placeholder">${borrowerName} </span> hereinafter called "the Borrower" and reference to the parties hereto shall mean and include their respective heirs, executors, administrators and assigns;</p>
+        <p>WHEREAS the Borrower is in need of funds and hence has approached the Lender to grant him/her an interest-free loan of Rs.<span class="highlight-placeholder">${totalAmount}/-</span> for a period of <span class="highlight-placeholder">${duration}</span></p>
+        <p>AND WHEREAS the Lender has agreed to grant a loan to the Borrower, with an interest of <span class="highlight-placeholder">${interest}% </span>;</p>
         <p>AND WHEREAS the parties hereto are desirous of recording the terms and conditions of this loan in writing;</p>
         <p>NOW THIS AGREEMENT WITNESSETH and it is hereby agreed by and between the parties hereto as under:</p>
-        <p>1. The Borrower hereto, being in need of money, has requested the Lender to give him/her a loan of Rs.${totalAmount}/- with interest ${interest}%, to which the Lender has agreed.</p>
-        <p>2. The said loan is repaid by the Borrower for a period of ${duration} months.</p>
+        <p>1. The Borrower hereto, being in need of money, has requested the Lender to give him/her a loan of Rs.<span class="highlight-placeholder">${totalAmount}/-</span> with interest <span class="highlight-placeholder">${interest}% </span>, to which the Lender has agreed.</p>
+        <p>2. The said loan is repaid by the Borrower for a period of <span class="highlight-placeholder">${duration}</span> months.</p>
         <p>3. The terms and conditions of this Agreement are arrived at by the mutual consent of the parties hereto.</p>
         <p>*Terms and Conditions:*</p>
-        <p>1. The Lender, ${lenderName}, agrees to lend the Borrower, ${borrowerName}, the sum of Rs.${totalAmount}/- with an interest of ${interest}%.</p>
-        <p>2. The Borrower acknowledges receiving the loan and agrees to repay the full amount, including interest, before ${duration}.</p>
-        <p>3. The Borrower shall make repayment in a single installment before ${duration}. Failure to repay on time may result in additional charges or penalties.</p>
+        <p>1. The Lender, <span class="highlight-placeholder">${lenderName} </span>, agrees to lend the Borrower, <span class="highlight-placeholder">${borrowerName} </span>, the sum of Rs.<span class="highlight-placeholder">${totalAmount}/-</span> with an interest of<span class="highlight-placeholder">${interest}% </span>.</p>
+        <p>2. The Borrower acknowledges receiving the loan and agrees to repay the full amount, including interest, before <span class="highlight-placeholder">${duration}</span>.</p>
+        <p>3. The Borrower shall make repayment in a single installment before <span class="highlight-placeholder">${duration}</span>. Failure to repay on time may result in additional charges or penalties.</p>
         <p>4. Both parties agree to abide by all applicable laws and regulations governing this loan transaction.</p>
         <p>*Note:* This document is a legally binding agreement. Please read and understand the terms.</p>
         <!-- Lender's Signature -->
-       <h4> <p>Lender's Signature: ${lenderName}</p>
+       <h4> <p>Lender's Signature: <span class="highlight-placeholder">${lenderName} </span></p>
         <!-- Borrower's Signature -->
-        <p>Borrower's Signature:${borrowerName}</p></h4>
+        <p>Borrower's Signature:<span class="highlight-placeholder">${borrowerName} </span></p></h4>
       </body>
     </html>
   `;
@@ -417,10 +437,19 @@ const CoInvestPage = () => {
         <button onClick={handleInvestFormOpen}>Request Investment</button>
 
         {showInvestForm && (
-          <LoanRequestForm
+          <Modal
+          isOpen={showInvestForm}
+          onRequestClose={() => setShowInvestForm(false)}
+          style={customStyles}
+        >
+          <div className="request-investment">{<LoanRequestForm
             onSubmit={handleInvestFormSubmit}
             onClose={handleInvestFormClose}
-          />
+          />}</div>
+
+          {/* <button onClick={() => setShowInvestForm(false)}>Close</button> */}
+        </Modal>
+          
         )}
       </div>
       <div className="co-loan-dashboard">

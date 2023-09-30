@@ -418,10 +418,16 @@ const CoLoanPage = () => {
 
   return (
     <div className="co-loan-container">
-      <div className="co-loan-welcome">
-        <button onClick={handleLoanFormOpen}>Request Loan</button>
-        <button onClick={() => handleLoanButtonClick}>
-          Pay by Phone Number
+      {/* left side */}
+      <div className="co-loan-buttons">
+        <button className="co-loan-button" onClick={handleLoanFormOpen}>
+          Request Loan Globally
+        </button>
+        <button
+          className="co-loan-button"
+          onClick={() => handleLoanButtonClick}
+        >
+          Request Loan With Friends
         </button>
 
         {showLoanForm && (
@@ -431,34 +437,9 @@ const CoLoanPage = () => {
           />
         )}
       </div>
-      <div className="co-loan-dashboard">
-        {loanRequests.map((request) => (
-          <div key={request.id} className="loan-card">
-            <div className="card-content">
-              <strong>User:</strong> {request.user}
-              <br />
-              <strong>Amount:</strong> {request.amount}
-              <br />
-              <strong>Info:</strong> {request.info}
-              <br />
-            </div>
-            <button onClick={() => handleLoanButtonClick(request)}>
-              Loan
-            </button>{" "}
-            {/* Loan button */}
-            {showAmountForm && (
-              <Modal
-                isOpen={showAmountForm}
-                onRequestClose={() => setShowAmountForm(false)}
-                style={customStyles}
-              >
-                <div className="pay-by-phone">{renderPayByPhoneStep()}</div>
-
-                <button onClick={() => setShowAmountForm(false)}>Close</button>
-              </Modal>
-            )}
-          </div>
-        ))}
+      {/* Right side */}
+      <div className="co-loan-welcome">
+        <img src="./images/Group 10.svg" />
       </div>
     </div>
   );

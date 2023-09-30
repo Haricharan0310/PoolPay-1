@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./CoSpendPage.css";
 import parsePhoneNumber from "libphonenumber-js";
 
-import { decodeQRCode } from "../qrCodeUtils";
+import { decodeQRCode } from "./qrCodeUtils";
 
 import { Html5QrcodeScanner } from "html5-qrcode";
 import { useRef } from "react";
@@ -173,6 +173,7 @@ const CoSpendPage = () => {
               value={totalAmount}
               onChange={handleTotalAmountInputChange}
             />
+            <button onClick={handlePrevStep}>Previous</button>
             <button onClick={handleNextStep}>Next</button>
           </div>
         );
@@ -186,6 +187,7 @@ const CoSpendPage = () => {
               value={numUsersPooling}
               onChange={handleNumUsersPoolingChange}
             />
+            <button onClick={handlePrevStep}>Previous</button>
             <button onClick={handleNextStep}>Next</button>
           </div>
         );
@@ -234,13 +236,6 @@ const CoSpendPage = () => {
             <button className="add-users-button" onClick={handleAddUserClick}>
               Add Users
             </button>
-            <button onClick={handlePrevStep}>Previous</button>
-            <button onClick={handleNextStep}>Next</button>
-          </div>
-        );
-      case 5:
-        return (
-          <div>
             <p>Total Amount Needed to be Paid (₹): ₹{totalAmount.toFixed(2)}</p>
             <p>
               Total Amount Entered by Users (₹): ₹{totalUserAmount.toFixed(2)}
@@ -249,6 +244,13 @@ const CoSpendPage = () => {
               Amount Remaining (₹): ₹
               {(totalAmount - totalUserAmount).toFixed(2)}
             </p>
+            <button onClick={handlePrevStep}>Previous</button>
+            <button onClick={handleNextStep}>Next</button>
+          </div>
+        );
+      case 5:
+        return (
+          <div>
             <button className="pay-money-button" onClick={handlePayMoneyClick}>
               Pay Money
             </button>
@@ -398,6 +400,7 @@ const CoSpendPage = () => {
     setPhoneNumberToPay("");
     setNumUsersPooling(0);
     setTotalUserAmount(0);
+    setShowGroupImage(false);
   };
 
   const handlePayMoneyClick = () => {
@@ -463,7 +466,7 @@ const CoSpendPage = () => {
       <div className="co-spend-buttons">
         <button className="co-spend-button" onClick={handleScanAndPayClick}>
           <div>
-            <img src="./images/Qrcode.svg" />
+            <img src="./images/Qr code.svg" />
           </div>{" "}
           Scan & Pay
         </button>
@@ -473,7 +476,7 @@ const CoSpendPage = () => {
           onClick={handlePayByPhoneNumberClick}
         >
           <div>
-            <img src="./images/Phone call.svg" />
+            <img src="./images/Vector.svg" />
           </div>{" "}
           Pay by Phone Number
         </button>
