@@ -18,7 +18,7 @@
 .co-loan-dashboard {
   display: grid;
   grid-template-columns: repeat(4, 1fr); /* Create four columns */
-  gap: 20px; /* Adjust the gap between cards */
+  gap: 15px; /* Adjust the gap between cards */
   padding: 0%;
   max-height: 100%; /* Limit the maximum height of the card grid */
   overflow-y: auto; /* Add vertical scroll when content exceeds the height */
@@ -34,21 +34,28 @@
   flex-shrink:0;
   border-radius: 20px;
   background: #1A1A1A;
-  text-align: fill;
+  
 }
 
 /* Style the search bar (no changes) */
 .search-bar {
-  margin-bottom: 20px; /* Add some spacing below the search bar */
-  width: 1106px;
-height: 64px;
-flex-shrink: 0;
+  margin-bottom: 20px; 
+  width: 1130px;
+  height: 53px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  background-color: #ffffff; /* Set the background color of the search bar */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;/* Add some spacing below the search bar */
 }
 
 .search-bar input {
+  flex: 1;
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: none;
   border-radius: 5px;
   font-size: 16px;
   outline: none;
@@ -64,4 +71,11 @@ flex-shrink: 0;
 .search-bar input:focus {
   border-color: #6a00ff; /* Change the border color on focus */
   box-shadow: 0 0 5px rgba(106, 0, 255, 0.5); /* Add a subtle box shadow on focus */
+}
+
+.search-icon {
+  margin-right: 10px; /* Add spacing between the input and icon */
+  width: 24px; /* Set the width of the icon */
+  height: 24px; /* Set the height of the icon */
+  cursor: pointer; /* Add a pointer cursor for interaction */
 }

@@ -452,6 +452,11 @@ const CoInvestPage = () => {
           value={searchTerm}
           onChange={handleSearch}
         />
+        <img
+          className="search-icon"
+          src="./images/searchsvg.svg"
+          alt="Search Icon"
+        />
       </div>
 
       <div className="co-loan-dashboard">
