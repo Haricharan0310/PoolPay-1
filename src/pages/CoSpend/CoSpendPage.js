@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import "./CoSpendPage.css";
 import parsePhoneNumber from "libphonenumber-js";
 import "./loader.css";
-import axios from "axios"
+import axios from "axios";
 import { decodeQRCode } from "./qrCodeUtils";
 
 import { Html5QrcodeScanner } from "html5-qrcode";
 import { useRef } from "react";
 
-import {io} from "socket.io-client";
+import { io } from "socket.io-client";
 import { useSocketRef } from "../contextProvider/SocketProvider";
 const qrcodeRegionId = "html5qr-code-full-region";
 
@@ -84,15 +84,21 @@ const CoSpendPage = () => {
   const [decodedResults, setDecodedResults] = useState(null);
 
   useEffect(() => {
+<<<<<<< HEAD
     socketRef.current = io(" https://poolpayapi.onrender.com").connect();
       if(socketRef.current){
         console.log("connected to socket");
       }
+=======
+    socketRef.current = io("https://poolpayapi.onrender.com").connect();
+    if (socketRef.current) {
+      console.log("connected to socket");
+    }
+>>>>>>> 1d032c8ec3323ef582aa5c50f5335bc10e6b6606
     return () => {
       if (socketRef.current) {
         socketRef.current.disconnect();
-    console.log("disconnected to scoket")
-
+        console.log("disconnected to scoket");
       }
     };
   }, []);
@@ -178,7 +184,11 @@ const CoSpendPage = () => {
               value={phoneNumberToPay}
               onChange={handlePhoneNumberInputChange}
             />
-            <button onClick={handleNextStep} disabled={!isPhoneNumberValid} className="next">
+            <button
+              onClick={handleNextStep}
+              disabled={!isPhoneNumberValid}
+              className="next"
+            >
               Next
             </button>
           </div>
@@ -193,8 +203,12 @@ const CoSpendPage = () => {
               value={totalAmount}
               onChange={handleTotalAmountInputChange}
             />
-             <button onClick={handlePrevStep}className="prev">Previous</button>
-            <button onClick={handleNextStep}className="next">Next</button>
+            <button onClick={handlePrevStep} className="prev">
+              Previous
+            </button>
+            <button onClick={handleNextStep} className="next">
+              Next
+            </button>
           </div>
         );
       case 3:
@@ -207,8 +221,12 @@ const CoSpendPage = () => {
               value={numUsersPooling}
               onChange={handleNumUsersPoolingChange}
             />
-            <button onClick={handlePrevStep}className="prev">Previous</button>
-            <button onClick={handleNextStep}className="next">Next</button>
+            <button onClick={handlePrevStep} className="prev">
+              Previous
+            </button>
+            <button onClick={handleNextStep} className="next">
+              Next
+            </button>
           </div>
         );
       case 4:
@@ -264,8 +282,12 @@ const CoSpendPage = () => {
               Amount Remaining (₹): ₹
               {(totalAmount - totalUserAmount).toFixed(2)}
             </p>
-            <button onClick={handlePrevStep}className="prev">Previous</button>
-            <button onClick={handleNextStep}className="next">Next</button>
+            <button onClick={handlePrevStep} className="prev">
+              Previous
+            </button>
+            <button onClick={handleNextStep} className="next">
+              Next
+            </button>
           </div>
         );
       case 5:
@@ -274,7 +296,9 @@ const CoSpendPage = () => {
             <button className="pay-money-button" onClick={handlePayMoneyClick}>
               Pay Money
             </button>
-            <button onClick={handlePrevStep} className="prev">Previous</button>
+            <button onClick={handlePrevStep} className="prev">
+              Previous
+            </button>
           </div>
         );
       default:
@@ -431,6 +455,7 @@ const CoSpendPage = () => {
       setLoading(true);
       socketRef.current.emit("paymentConfirmation", users);
       console.log("payment confirmation sent");
+<<<<<<< HEAD
       const messageTemplate = "Your friend is waiting for your payment, Open PoolPay and checkout the notification";
 
 // Extract phone numbers from the users array
@@ -453,21 +478,34 @@ const messageObject = {
         .then(response => {
             // setLoading(false); // Hide the loading spinner
             const data = response.data;
+=======
+      const requestData = {
+        numbers: users.map((user) => user.phoneNumber),
+        message:
+          "Hey, Your friend is waiting for your payment,Open PoolPay and checkout the notification ",
+      };
+      console.log(requestData);
+      // Make an API call to send the messages using Axios
+      axios
+        .post("https://poolpayapi.onrender.com/send-messages", requestData)
+        .then((response) => {
+          // setLoading(false); // Hide the loading spinner
+          const data = response.data;
+>>>>>>> 1d032c8ec3323ef582aa5c50f5335bc10e6b6606
         })
-        .catch(error => {
-            setLoading(false); // Hide the loading spinner
-            console.error('Error sending messages:', error);
-            alert("Failed to send messages");
+        .catch((error) => {
+          setLoading(false); // Hide the loading spinner
+          console.error("Error sending messages:", error);
+          alert("Failed to send messages");
         });
-      socketRef.current.on("Accepted",(event)=>{
+      socketRef.current.on("Accepted", (event) => {
         setLoading(false);
         alert("Payment Successful!");
-      })
-      socketRef.current.on("Declined",(event)=>{
+      });
+      socketRef.current.on("Declined", (event) => {
         setLoading(false);
         alert(event.status);
-      })
-     
+      });
     } else {
       alert(
         "Please ensure the total amount and user amounts match before proceeding with payment."
@@ -529,7 +567,7 @@ const messageObject = {
           </div>{" "}
           Scan & Pay
         </button>
-  
+
         <button
           className="co-spend-button"
           onClick={handlePayByPhoneNumberClick}
@@ -540,7 +578,7 @@ const messageObject = {
           Pay by Phone Number
         </button>
       </div>
-  
+
       {/* Right Side */}
       <div className="co-spend-welcome">
         {showGroupImage && ( // Conditionally render the Group32.png image
@@ -555,11 +593,11 @@ const messageObject = {
                 disableFlip={false}
                 qrCodeSuccessCallback={onNewScanResult}
               />
-  
+
               {decodedResults && (
                 <button onClick={() => scanNextStepHandler()}>Next</button>
               )}
-  
+
               {/* <input
                 type="file"
                 accept="image/*"
