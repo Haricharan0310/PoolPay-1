@@ -30,7 +30,7 @@ const HomePage = () => {
 
   useEffect(() => {
     // Listen for paymentConfirmation events from the server
-    socket.current = io("https://poolpayapi.onrender.com").connect();
+    socket.current = io("http://localhost:4000").connect();
     if(socket.current){
       console.log("connected to socket");
     }

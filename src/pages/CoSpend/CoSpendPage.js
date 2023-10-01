@@ -84,7 +84,7 @@ const CoSpendPage = () => {
   const [decodedResults, setDecodedResults] = useState(null);
 
   useEffect(() => {
-    socketRef.current = io("https://poolpayapi.onrender.com").connect();
+    socketRef.current = io("http://localhost:4000").connect();
       if(socketRef.current){
         console.log("connected to socket");
       }
@@ -449,7 +449,7 @@ const messageObject = {
 };
     console.log(messageObject);
     // Make an API call to send the messages using Axios
-    axios.post('https://poolpayapi.onrender.com/send-messages', messageObject)
+    axios.post('http://localhost:4000/send-messages', messageObject)
         .then(response => {
             // setLoading(false); // Hide the loading spinner
             const data = response.data;
