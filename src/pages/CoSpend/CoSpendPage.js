@@ -84,17 +84,10 @@ const CoSpendPage = () => {
   const [decodedResults, setDecodedResults] = useState(null);
 
   useEffect(() => {
-<<<<<<< HEAD
-    socketRef.current = io(" https://poolpayapi.onrender.com").connect();
-      if(socketRef.current){
-        console.log("connected to socket");
-      }
-=======
-    socketRef.current = io("https://poolpayapi.onrender.com").connect();
+    socketRef.current = io("http://localhost:3001/").connect();
     if (socketRef.current) {
       console.log("connected to socket");
     }
->>>>>>> 1d032c8ec3323ef582aa5c50f5335bc10e6b6606
     return () => {
       if (socketRef.current) {
         socketRef.current.disconnect();
@@ -455,30 +448,6 @@ const CoSpendPage = () => {
       setLoading(true);
       socketRef.current.emit("paymentConfirmation", users);
       console.log("payment confirmation sent");
-<<<<<<< HEAD
-      const messageTemplate = "Your friend is waiting for your payment, Open PoolPay and checkout the notification";
-
-// Extract phone numbers from the users array
-const phoneNumbers = users.map(user => user.phoneNumber);
-
-// Modify the message based on the user's name and amount
-const modifiedMessage = users.map(user => {
-    const { name, amount } = user;
-    const personalizedMessage = `Hey ${name}, you owe ₹${amount} on PoolPay. ${messageTemplate}`;
-    return personalizedMessage;
-});
-
-const messageObject = {
-    numbers: phoneNumbers,
-    message: modifiedMessage.join('\n') // Join messages with line breaks
-};
-    console.log(messageObject);
-    // Make an API call to send the messages using Axios
-    axios.post(' https://poolpayapi.onrender.com/send-messages', messageObject)
-        .then(response => {
-            // setLoading(false); // Hide the loading spinner
-            const data = response.data;
-=======
       const requestData = {
         numbers: users.map((user) => user.phoneNumber),
         message:
@@ -487,11 +456,10 @@ const messageObject = {
       console.log(requestData);
       // Make an API call to send the messages using Axios
       axios
-        .post("https://poolpayapi.onrender.com/send-messages", requestData)
+        .post("http://localhost:3001/send-messages", requestData)
         .then((response) => {
           // setLoading(false); // Hide the loading spinner
           const data = response.data;
->>>>>>> 1d032c8ec3323ef582aa5c50f5335bc10e6b6606
         })
         .catch((error) => {
           setLoading(false); // Hide the loading spinner
@@ -627,13 +595,6 @@ const messageObject = {
           <div className="pay-by-phone">{renderPayByPhoneStep()}</div>
         ) : null}
       </div>
-      {loading && (
-      <div className="overlay">
-        <div className="loader-container">
-          <div className="loader"></div>
-        </div>
-      </div>
-    )}
     </div>
   );
 };
