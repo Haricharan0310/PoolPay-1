@@ -11,27 +11,27 @@ import { io } from "socket.io-client";
 import { useSocketRef } from "./contextProvider/SocketProvider";
 const HomePage = () => {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [amount,setAmount]=useState(0);
+  const [amount, setAmount] = useState(0);
   const socket = useSocketRef();
 
   console.log(socket.current);
   const handleConfirmPayment = () => {
     // Trigger a socket event for payment confirmation
     socket.current.emit("paymentAccepted", { status: "confirmed" });
-    setIsPaymentModalOpen(false)
+    setIsPaymentModalOpen(false);
   };
 
   // Function to handle payment decline
   const handleDeclinePayment = () => {
     // Trigger a socket event for payment decline
     socket.current.emit("paymentDeclined", { status: "declined" });
-    setIsPaymentModalOpen(false)
+    setIsPaymentModalOpen(false);
   };
 
   useEffect(() => {
     // Listen for paymentConfirmation events from the server
-    socket.current = io("http://localhost:4000").connect();
-    if(socket.current){
+    socket.current = io("https://poolpayapi.onrender.com").connect();
+    if (socket.current) {
       console.log("connected to socket");
     }
     // console.log(socket.current.connected);
@@ -44,7 +44,7 @@ const HomePage = () => {
     socket.current.on("paymentStatus", (event) => {
       try {
         console.log("payment status received", event.status);
-        setAmount(event.Amount)
+        setAmount(event.Amount);
         setIsPaymentModalOpen(true);
       } catch (error) {
         console.error("Error handling paymentStatus event:", error);
