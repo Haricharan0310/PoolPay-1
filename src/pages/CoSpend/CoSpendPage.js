@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "./CoSpendPage.css";
 import parsePhoneNumber from "libphonenumber-js";
-
+import "./loader.css";
+import axios from "axios"
 import { decodeQRCode } from "./qrCodeUtils";
 
 import { Html5QrcodeScanner } from "html5-qrcode";
 import { useRef } from "react";
 
+import {io} from "socket.io-client";
+import { useSocketRef } from "../contextProvider/SocketProvider";
 const qrcodeRegionId = "html5qr-code-full-region";
 
 // Creates the configuration object for Html5QrcodeScanner.
@@ -74,8 +77,25 @@ const CoSpendPage = () => {
   const [numUsersPooling, setNumUsersPooling] = useState(0);
   const [totalUserAmount, setTotalUserAmount] = useState(0);
   const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const socketRef = useSocketRef();
 
   const [decodedResults, setDecodedResults] = useState(null);
+
+  useEffect(() => {
+    socketRef.current = io("http://localhost:4000").connect();
+      if(socketRef.current){
+        console.log("connected to socket");
+      }
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+    console.log("disconnected to scoket")
+
+      }
+    };
+  }, []);
 
   useEffect(() => {
     // Calculate the totalUserAmount (sum of userAmounts)
@@ -406,9 +426,36 @@ const CoSpendPage = () => {
   const handlePayMoneyClick = () => {
     // Check if the total amount and totalUserAmount match before proceeding with payment
     if (totalAmount === totalUserAmount) {
-      // Implement your logic for payment here
-      // For example, you can display a confirmation message
-      alert("Payment Successful!");
+      console.log(users);
+      // you can display a confirmation message
+      setLoading(true);
+      socketRef.current.emit("paymentConfirmation", users);
+      console.log("payment confirmation sent");
+      const requestData = {
+        numbers: users.map(user => user.phoneNumber),
+        message: "Hey, Your friend is waiting for your payment,Open PoolPay and checkout the notification "
+    };
+    console.log(requestData);
+    // Make an API call to send the messages using Axios
+    axios.post('http://localhost:4000/send-messages', requestData)
+        .then(response => {
+            // setLoading(false); // Hide the loading spinner
+            const data = response.data;
+        })
+        .catch(error => {
+            setLoading(false); // Hide the loading spinner
+            console.error('Error sending messages:', error);
+            alert("Failed to send messages");
+        });
+      socketRef.current.on("Accepted",(event)=>{
+        setLoading(false);
+        alert("Payment Successful!");
+      })
+      socketRef.current.on("Declined",(event)=>{
+        setLoading(false);
+        alert(event.status);
+      })
+     
     } else {
       alert(
         "Please ensure the total amount and user amounts match before proceeding with payment."
