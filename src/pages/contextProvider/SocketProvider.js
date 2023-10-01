@@ -14,7 +14,7 @@ export function SocketProvider({ children }) {
   const socketRef = useRef(null);
 
 //   useEffect(() => {
-//     socketRef.current = io("http://localhost:4000").connect();
+//     socketRef.current = io("https://poolpayapi.onrender.com").connect();
 //     // console.log(socketRef.current.connected)
 
 //     if (socketRef.current) {
