@@ -84,7 +84,7 @@ const CoSpendPage = () => {
   const [decodedResults, setDecodedResults] = useState(null);
 
   useEffect(() => {
-    socketRef.current = io("https://poolpayapi.onrender.com").connect();
+    socketRef.current = io("http://localhost:4000").connect();
     if (socketRef.current) {
       console.log("connected to socket");
     }
@@ -448,6 +448,23 @@ const CoSpendPage = () => {
       setLoading(true);
       socketRef.current.emit("paymentConfirmation", users);
       console.log("payment confirmation sent");
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+      const requestData = {
+        numbers: users.map((user) => user.phoneNumber),
+        message:
+          "Hey, Your friend is waiting for your payment,Open PoolPay and checkout the notification ",
+      };
+      console.log(requestData);
+      // Make an API call to send the messages using Axios
+      axios
+        .post("http://localhost:4000/send-messages", requestData)
+        .then((response) => {
+          // setLoading(false); // Hide the loading spinner
+          const data = response.data;
+=======
+>>>>>>> Stashed changes
       const messageTemplate = "Your friend is waiting for your payment, Open PoolPay and checkout the notification";
 
 // Extract phone numbers from the users array
@@ -470,6 +487,10 @@ const messageObject = {
         .then(response => {
             // setLoading(false); // Hide the loading spinner
             const data = response.data;
+<<<<<<< Updated upstream
+=======
+>>>>>>> a0154510943a01befb7dfd1e1eb39162c93f27ca
+>>>>>>> Stashed changes
         })
         .catch(error => {
             setLoading(false); // Hide the loading spinner
