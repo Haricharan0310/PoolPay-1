@@ -1,641 +1,641 @@
-import React, { useState, useEffect } from "react";
-import "./CoSpendPage.css";
-import parsePhoneNumber from "libphonenumber-js";
-import "./loader.css";
-import axios from "axios";
-import { decodeQRCode } from "./qrCodeUtils";
+// import React, { useState, useEffect } from "react";
+// import "./CoSpendPage.css";
+// import parsePhoneNumber from "libphonenumber-js";
+// import "./loader.css";
+// import axios from "axios";
+// import { decodeQRCode } from "./qrCodeUtils";
 
-import { Html5QrcodeScanner } from "html5-qrcode";
-import { useRef } from "react";
+// import { Html5QrcodeScanner } from "html5-qrcode";
+// import { useRef } from "react";
 
-import { io } from "socket.io-client";
-import { useSocketRef } from "../contextProvider/SocketProvider";
-const qrcodeRegionId = "html5qr-code-full-region";
+// import { io } from "socket.io-client";
+// import { useSocketRef } from "../contextProvider/SocketProvider";
+// const qrcodeRegionId = "html5qr-code-full-region";
 
-// Creates the configuration object for Html5QrcodeScanner.
-const createConfig = (props) => {
-  let config = {};
-  if (props.fps) {
-    config.fps = props.fps;
-  }
-  if (props.qrbox) {
-    config.qrbox = props.qrbox;
-  }
-  if (props.aspectRatio) {
-    config.aspectRatio = props.aspectRatio;
-  }
-  if (props.disableFlip !== undefined) {
-    config.disableFlip = props.disableFlip;
-  }
-  return config;
-};
+// // Creates the configuration object for Html5QrcodeScanner.
+// const createConfig = (props) => {
+//   let config = {};
+//   if (props.fps) {
+//     config.fps = props.fps;
+//   }
+//   if (props.qrbox) {
+//     config.qrbox = props.qrbox;
+//   }
+//   if (props.aspectRatio) {
+//     config.aspectRatio = props.aspectRatio;
+//   }
+//   if (props.disableFlip !== undefined) {
+//     config.disableFlip = props.disableFlip;
+//   }
+//   return config;
+// };
 
-const Html5QrcodePlugin = (props) => {
-  const html5QrcodeScannerRef = useRef(null);
+// const Html5QrcodePlugin = (props) => {
+//   const html5QrcodeScannerRef = useRef(null);
 
-  useEffect(() => {
-    // when component mounts
-    const config = createConfig(props);
-    const verbose = props.verbose === true;
-    // Success callback is required.
-    if (!props.qrCodeSuccessCallback) {
-      throw new Error("qrCodeSuccessCallback is a required callback.");
-    }
-    const html5QrcodeScanner = new Html5QrcodeScanner(
-      qrcodeRegionId,
-      config,
-      verbose
-    );
-    html5QrcodeScannerRef.current = html5QrcodeScanner;
-    html5QrcodeScanner.render(
-      props.qrCodeSuccessCallback,
-      props.qrCodeErrorCallback
-    );
+//   useEffect(() => {
+//     // when component mounts
+//     const config = createConfig(props);
+//     const verbose = props.verbose === true;
+//     // Success callback is required.
+//     if (!props.qrCodeSuccessCallback) {
+//       throw new Error("qrCodeSuccessCallback is a required callback.");
+//     }
+//     const html5QrcodeScanner = new Html5QrcodeScanner(
+//       qrcodeRegionId,
+//       config,
+//       verbose
+//     );
+//     html5QrcodeScannerRef.current = html5QrcodeScanner;
+//     html5QrcodeScanner.render(
+//       props.qrCodeSuccessCallback,
+//       props.qrCodeErrorCallback
+//     );
 
-    // cleanup function when component will unmount
-    return () => {
-      html5QrcodeScannerRef.current.clear().catch((error) => {
-        console.error("Failed to clear html5QrcodeScanner. ", error);
-      });
-    };
-  }, []);
+//     // cleanup function when component will unmount
+//     return () => {
+//       html5QrcodeScannerRef.current.clear().catch((error) => {
+//         console.error("Failed to clear html5QrcodeScanner. ", error);
+//       });
+//     };
+//   }, []);
 
-  return <div id={qrcodeRegionId} />;
-};
-const CoSpendPage = () => {
-  const [showGroupImage, setShowGroupImage] = useState(true);
-  const [currentStep, setCurrentStep] = useState(1);
-  const [currentScanStep, setScanStep] = useState(0);
-  const [showScanner, setShowScanner] = useState(false);
-  const [uploadedQRCodeImage, setUploadedQRCodeImage] = useState(null);
-  const [scannedPhoneNumber, setScannedPhoneNumber] = useState("");
-  const [showPayByPhoneNumber, setShowPayByPhoneNumber] = useState(false);
-  const [selectedContact, setSelectedContact] = useState(null);
-  const [totalAmount, setTotalAmount] = useState(0);
-  const [users, setUsers] = useState([]);
-  const [phoneNumberToPay, setPhoneNumberToPay] = useState("");
-  const [numUsersPooling, setNumUsersPooling] = useState(0);
-  const [totalUserAmount, setTotalUserAmount] = useState(0);
-  const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(false);
-  const [loading, setLoading] = useState(false);
+//   return <div id={qrcodeRegionId} />;
+// };
+// const CoSpendPage = () => {
+//   const [showGroupImage, setShowGroupImage] = useState(true);
+//   const [currentStep, setCurrentStep] = useState(1);
+//   const [currentScanStep, setScanStep] = useState(0);
+//   const [showScanner, setShowScanner] = useState(false);
+//   const [uploadedQRCodeImage, setUploadedQRCodeImage] = useState(null);
+//   const [scannedPhoneNumber, setScannedPhoneNumber] = useState("");
+//   const [showPayByPhoneNumber, setShowPayByPhoneNumber] = useState(false);
+//   const [selectedContact, setSelectedContact] = useState(null);
+//   const [totalAmount, setTotalAmount] = useState(0);
+//   const [users, setUsers] = useState([]);
+//   const [phoneNumberToPay, setPhoneNumberToPay] = useState("");
+//   const [numUsersPooling, setNumUsersPooling] = useState(0);
+//   const [totalUserAmount, setTotalUserAmount] = useState(0);
+//   const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(false);
+//   const [loading, setLoading] = useState(false);
 
-  const socketRef = useSocketRef();
+//   const socketRef = useSocketRef();
 
-  const [decodedResults, setDecodedResults] = useState(null);
+//   const [decodedResults, setDecodedResults] = useState(null);
 
-  useEffect(() => {
-    socketRef.current = io("http://localhost:4000").connect();
-    if (socketRef.current) {
-      console.log("connected to socket");
-    }
-    return () => {
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-        console.log("disconnected to scoket");
-      }
-    };
-  }, []);
+//   useEffect(() => {
+//     socketRef.current = io("http://localhost:4000").connect();
+//     if (socketRef.current) {
+//       console.log("connected to socket");
+//     }
+//     return () => {
+//       if (socketRef.current) {
+//         socketRef.current.disconnect();
+//         console.log("disconnected to scoket");
+//       }
+//     };
+//   }, []);
 
-  useEffect(() => {
-    // Calculate the totalUserAmount (sum of userAmounts)
-    const sum = users.reduce((acc, user) => acc + parseFloat(user.amount), 0);
-    setTotalUserAmount(sum);
-  }, [users]);
+//   useEffect(() => {
+//     // Calculate the totalUserAmount (sum of userAmounts)
+//     const sum = users.reduce((acc, user) => acc + parseFloat(user.amount), 0);
+//     setTotalUserAmount(sum);
+//   }, [users]);
 
-  const handleUploadQRCode = (file) => {
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const dataURL = event.target.result;
-        setUploadedQRCodeImage(dataURL);
-        setScannedPhoneNumber(""); // Clear previously scanned phone number
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+//   const handleUploadQRCode = (file) => {
+//     if (file) {
+//       const reader = new FileReader();
+//       reader.onload = (event) => {
+//         const dataURL = event.target.result;
+//         setUploadedQRCodeImage(dataURL);
+//         setScannedPhoneNumber(""); // Clear previously scanned phone number
+//       };
+//       reader.readAsDataURL(file);
+//     }
+//   };
 
-  function scanNextStepHandler() {
-    setScanStep(currentScanStep + 1);
-  }
-  function scanPrevStepHandler() {
-    setScanStep(currentScanStep - 1);
-  }
+//   function scanNextStepHandler() {
+//     setScanStep(currentScanStep + 1);
+//   }
+//   function scanPrevStepHandler() {
+//     setScanStep(currentScanStep - 1);
+//   }
 
-  const handleScanQRCode = async () => {
-    if (uploadedQRCodeImage) {
-      try {
-        const phoneNumber = await decodeQRCode(uploadedQRCodeImage);
+//   const handleScanQRCode = async () => {
+//     if (uploadedQRCodeImage) {
+//       try {
+//         const phoneNumber = await decodeQRCode(uploadedQRCodeImage);
 
-        if (phoneNumber) {
-          setScannedPhoneNumber(phoneNumber);
-        } else {
-          alert("Failed to decode QR code. Please try again.");
-        }
-      } catch (error) {
-        console.error("Error decoding QR code:", error);
-        alert("An error occurred while decoding the QR code.");
-      }
-    } else {
-      alert("Please upload a QR code image first.");
-    }
-  };
-  const validatePhoneNumber = (phoneNumber) => {
-    try {
-      const parsedPhoneNumber = parsePhoneNumber(phoneNumber);
-      const isValid = parsedPhoneNumber.isValid();
-      return isValid;
-    } catch (error) {
-      return false;
-    }
-  };
+//         if (phoneNumber) {
+//           setScannedPhoneNumber(phoneNumber);
+//         } else {
+//           alert("Failed to decode QR code. Please try again.");
+//         }
+//       } catch (error) {
+//         console.error("Error decoding QR code:", error);
+//         alert("An error occurred while decoding the QR code.");
+//       }
+//     } else {
+//       alert("Please upload a QR code image first.");
+//     }
+//   };
+//   const validatePhoneNumber = (phoneNumber) => {
+//     try {
+//       const parsedPhoneNumber = parsePhoneNumber(phoneNumber);
+//       const isValid = parsedPhoneNumber.isValid();
+//       return isValid;
+//     } catch (error) {
+//       return false;
+//     }
+//   };
 
-  const handleNextStep = () => {
-    setCurrentStep((prevStep) => prevStep + 1);
-  };
+//   const handleNextStep = () => {
+//     setCurrentStep((prevStep) => prevStep + 1);
+//   };
 
-  const handlePrevStep = () => {
-    setCurrentStep((prevStep) => prevStep - 1);
-  };
+//   const handlePrevStep = () => {
+//     setCurrentStep((prevStep) => prevStep - 1);
+//   };
 
-  //extracting text
+//   //extracting text
 
-  const onNewScanResult = (decodedText, decodedResult) => {
-    // alert(decodedText)
-    setPhoneNumberToPay(decodedText);
-    setIsPhoneNumberValid(validatePhoneNumber(decodedText));
-    setDecodedResults(decodedText);
-  };
-  const renderPayByPhoneStep = () => {
-    switch (currentStep) {
-      case 1:
-        return (
-          <div>
-            <label>Enter Phone Number to Send Money To:</label>
-            <input
-              type="text"
-              placeholder="Phone Number"
-              value={phoneNumberToPay}
-              onChange={handlePhoneNumberInputChange}
-            />
-            <button
-              onClick={handleNextStep}
-              disabled={!isPhoneNumberValid}
-              className="next"
-            >
-              Next
-            </button>
-          </div>
-        );
-      case 2:
-        return (
-          <div>
-            <label>Enter Total Amount (₹):</label>
-            <input
-              type="number"
-              placeholder="Total Amount"
-              value={totalAmount}
-              onChange={handleTotalAmountInputChange}
-            />
-            <button onClick={handlePrevStep} className="prev">
-              Previous
-            </button>
-            <button onClick={handleNextStep} className="next">
-              Next
-            </button>
-          </div>
-        );
-      case 3:
-        return (
-          <div>
-            <label>Number of Users Pooling Money:</label>
-            <input
-              type="number"
-              placeholder="Number of Users"
-              value={numUsersPooling}
-              onChange={handleNumUsersPoolingChange}
-            />
-            <button onClick={handlePrevStep} className="prev">
-              Previous
-            </button>
-            <button onClick={handleNextStep} className="next">
-              Next
-            </button>
-          </div>
-        );
-      case 4:
-        return (
-          <div>
-            {/* Render user input fields here */}
-            {users.map((user, index) => (
-              <div key={index} className="user-input-row">
-                <div className="user-input">
-                  <input
-                    type="text"
-                    placeholder={`User ${index + 1} Name`}
-                    value={user.name}
-                    onChange={(e) =>
-                      handleUserInputChange(index, "name", e.target.value)
-                    }
-                  />
-                </div>
-                <div className="user-input">
-                  <input
-                    type="text"
-                    placeholder={`User ${index + 1} Phone Number`}
-                    value={user.phoneNumber}
-                    onChange={(e) =>
-                      handleUserInputChange(
-                        index,
-                        "phoneNumber",
-                        e.target.value
-                      )
-                    }
-                  />
-                </div>
-                <div className="user-input">
-                  <input
-                    type="number"
-                    placeholder={`Amount (₹)`}
-                    value={user.amount}
-                    onChange={(e) =>
-                      handleUserInputChange(index, "amount", e.target.value)
-                    }
-                  />
-                </div>
-              </div>
-            ))}
-            <button className="add-users-button" onClick={handleAddUserClick}>
-              Add Users
-            </button>
-            <p>Total Amount Needed to be Paid (₹): ₹{totalAmount.toFixed(2)}</p>
-            <p>
-              Total Amount Entered by Users (₹): ₹{totalUserAmount.toFixed(2)}
-            </p>
-            <p>
-              Amount Remaining (₹): ₹
-              {(totalAmount - totalUserAmount).toFixed(2)}
-            </p>
-            <button onClick={handlePrevStep} className="prev">
-              Previous
-            </button>
-            <button onClick={handleNextStep} className="next">
-              Next
-            </button>
-          </div>
-        );
-      case 5:
-        return (
-          <div>
-            <button className="pay-money-button" onClick={handlePayMoneyClick}>
-              Pay Money
-            </button>
-            <button onClick={handlePrevStep} className="prev">
-              Previous
-            </button>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
-  const renderPayByScanStep = () => {
-    switch (currentScanStep) {
-      case 1:
-        return (
-          <div>
-            <div className="pay-by-phone">
-              <label>Enter Phone Number to Send Money To:</label>
-              <input
-                type="text"
-                placeholder="Phone Number"
-                value={phoneNumberToPay}
-                onChange={handlePhoneNumberInputChange}
-              />
-              <button
-                onClick={scanNextStepHandler}
-                disabled={!isPhoneNumberValid}
-              >
-                Next
-              </button>
-            </div>
-          </div>
-        );
-      case 2:
-        return (
-          <div>
-            <label>Enter Total Amount (₹):</label>
-            <input
-              type="number"
-              placeholder="Total Amount"
-              value={totalAmount}
-              onChange={handleTotalAmountInputChange}
-            />
-            <button onClick={scanNextStepHandler}>Next</button>
-          </div>
-        );
-      case 3:
-        return (
-          <div>
-            <label>Number of Users Pooling Money:</label>
-            <input
-              type="number"
-              placeholder="Number of Users"
-              value={numUsersPooling}
-              onChange={handleNumUsersPoolingChange}
-            />
-            <button onClick={scanNextStepHandler}>Next</button>
-          </div>
-        );
-      case 4:
-        return (
-          <div>
-            {/* Render user input fields here */}
-            {users.map((user, index) => (
-              <div key={index} className="user-input-row">
-                <div className="user-input">
-                  <input
-                    type="text"
-                    placeholder={`User ${index + 1} Name`}
-                    value={user.name}
-                    onChange={(e) =>
-                      handleUserInputChange(index, "name", e.target.value)
-                    }
-                  />
-                </div>
-                <div className="user-input">
-                  <input
-                    type="text"
-                    placeholder={`User ${index + 1} Phone Number`}
-                    value={user.phoneNumber}
-                    onChange={(e) =>
-                      handleUserInputChange(
-                        index,
-                        "phoneNumber",
-                        e.target.value
-                      )
-                    }
-                  />
-                </div>
-                <div className="user-input">
-                  <input
-                    type="number"
-                    placeholder={`Amount (₹)`}
-                    value={user.amount}
-                    onChange={(e) =>
-                      handleUserInputChange(index, "amount", e.target.value)
-                    }
-                  />
-                </div>
-              </div>
-            ))}
-            <button className="add-users-button" onClick={handleAddUserClick}>
-              Add Users
-            </button>
-            <button onClick={scanPrevStepHandler}>Previous</button>
-            <button onClick={scanNextStepHandler}>Next</button>
-          </div>
-        );
-      case 5:
-        return (
-          <div>
-            <p>Total Amount Needed to be Paid (₹): ₹{totalAmount.toFixed(2)}</p>
-            <p>
-              Total Amount Entered by Users (₹): ₹{totalUserAmount.toFixed(2)}
-            </p>
-            <p>
-              Amount Remaining (₹): ₹
-              {(totalAmount - totalUserAmount).toFixed(2)}
-            </p>
-            <button className="pay-money-button" onClick={handlePayMoneyClick}>
-              Send Requests
-            </button>
-            <button onClick={scanPrevStepHandler}>Previous</button>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
+//   const onNewScanResult = (decodedText, decodedResult) => {
+//     // alert(decodedText)
+//     setPhoneNumberToPay(decodedText);
+//     setIsPhoneNumberValid(validatePhoneNumber(decodedText));
+//     setDecodedResults(decodedText);
+//   };
+//   const renderPayByPhoneStep = () => {
+//     switch (currentStep) {
+//       case 1:
+//         return (
+//           <div>
+//             <label>Enter Phone Number to Send Money To:</label>
+//             <input
+//               type="text"
+//               placeholder="Phone Number"
+//               value={phoneNumberToPay}
+//               onChange={handlePhoneNumberInputChange}
+//             />
+//             <button
+//               onClick={handleNextStep}
+//               disabled={!isPhoneNumberValid}
+//               className="next"
+//             >
+//               Next
+//             </button>
+//           </div>
+//         );
+//       case 2:
+//         return (
+//           <div>
+//             <label>Enter Total Amount (₹):</label>
+//             <input
+//               type="number"
+//               placeholder="Total Amount"
+//               value={totalAmount}
+//               onChange={handleTotalAmountInputChange}
+//             />
+//             <button onClick={handlePrevStep} className="prev">
+//               Previous
+//             </button>
+//             <button onClick={handleNextStep} className="next">
+//               Next
+//             </button>
+//           </div>
+//         );
+//       case 3:
+//         return (
+//           <div>
+//             <label>Number of Users Pooling Money:</label>
+//             <input
+//               type="number"
+//               placeholder="Number of Users"
+//               value={numUsersPooling}
+//               onChange={handleNumUsersPoolingChange}
+//             />
+//             <button onClick={handlePrevStep} className="prev">
+//               Previous
+//             </button>
+//             <button onClick={handleNextStep} className="next">
+//               Next
+//             </button>
+//           </div>
+//         );
+//       case 4:
+//         return (
+//           <div>
+//             {/* Render user input fields here */}
+//             {users.map((user, index) => (
+//               <div key={index} className="user-input-row">
+//                 <div className="user-input">
+//                   <input
+//                     type="text"
+//                     placeholder={`User ${index + 1} Name`}
+//                     value={user.name}
+//                     onChange={(e) =>
+//                       handleUserInputChange(index, "name", e.target.value)
+//                     }
+//                   />
+//                 </div>
+//                 <div className="user-input">
+//                   <input
+//                     type="text"
+//                     placeholder={`User ${index + 1} Phone Number`}
+//                     value={user.phoneNumber}
+//                     onChange={(e) =>
+//                       handleUserInputChange(
+//                         index,
+//                         "phoneNumber",
+//                         e.target.value
+//                       )
+//                     }
+//                   />
+//                 </div>
+//                 <div className="user-input">
+//                   <input
+//                     type="number"
+//                     placeholder={`Amount (₹)`}
+//                     value={user.amount}
+//                     onChange={(e) =>
+//                       handleUserInputChange(index, "amount", e.target.value)
+//                     }
+//                   />
+//                 </div>
+//               </div>
+//             ))}
+//             <button className="add-users-button" onClick={handleAddUserClick}>
+//               Add Users
+//             </button>
+//             <p>Total Amount Needed to be Paid (₹): ₹{totalAmount.toFixed(2)}</p>
+//             <p>
+//               Total Amount Entered by Users (₹): ₹{totalUserAmount.toFixed(2)}
+//             </p>
+//             <p>
+//               Amount Remaining (₹): ₹
+//               {(totalAmount - totalUserAmount).toFixed(2)}
+//             </p>
+//             <button onClick={handlePrevStep} className="prev">
+//               Previous
+//             </button>
+//             <button onClick={handleNextStep} className="next">
+//               Next
+//             </button>
+//           </div>
+//         );
+//       case 5:
+//         return (
+//           <div>
+//             <button className="pay-money-button" onClick={handlePayMoneyClick}>
+//               Pay Money
+//             </button>
+//             <button onClick={handlePrevStep} className="prev">
+//               Previous
+//             </button>
+//           </div>
+//         );
+//       default:
+//         return null;
+//     }
+//   };
+//   const renderPayByScanStep = () => {
+//     switch (currentScanStep) {
+//       case 1:
+//         return (
+//           <div>
+//             <div className="pay-by-phone">
+//               <label>Enter Phone Number to Send Money To:</label>
+//               <input
+//                 type="text"
+//                 placeholder="Phone Number"
+//                 value={phoneNumberToPay}
+//                 onChange={handlePhoneNumberInputChange}
+//               />
+//               <button
+//                 onClick={scanNextStepHandler}
+//                 disabled={!isPhoneNumberValid}
+//               >
+//                 Next
+//               </button>
+//             </div>
+//           </div>
+//         );
+//       case 2:
+//         return (
+//           <div>
+//             <label>Enter Total Amount (₹):</label>
+//             <input
+//               type="number"
+//               placeholder="Total Amount"
+//               value={totalAmount}
+//               onChange={handleTotalAmountInputChange}
+//             />
+//             <button onClick={scanNextStepHandler}>Next</button>
+//           </div>
+//         );
+//       case 3:
+//         return (
+//           <div>
+//             <label>Number of Users Pooling Money:</label>
+//             <input
+//               type="number"
+//               placeholder="Number of Users"
+//               value={numUsersPooling}
+//               onChange={handleNumUsersPoolingChange}
+//             />
+//             <button onClick={scanNextStepHandler}>Next</button>
+//           </div>
+//         );
+//       case 4:
+//         return (
+//           <div>
+//             {/* Render user input fields here */}
+//             {users.map((user, index) => (
+//               <div key={index} className="user-input-row">
+//                 <div className="user-input">
+//                   <input
+//                     type="text"
+//                     placeholder={`User ${index + 1} Name`}
+//                     value={user.name}
+//                     onChange={(e) =>
+//                       handleUserInputChange(index, "name", e.target.value)
+//                     }
+//                   />
+//                 </div>
+//                 <div className="user-input">
+//                   <input
+//                     type="text"
+//                     placeholder={`User ${index + 1} Phone Number`}
+//                     value={user.phoneNumber}
+//                     onChange={(e) =>
+//                       handleUserInputChange(
+//                         index,
+//                         "phoneNumber",
+//                         e.target.value
+//                       )
+//                     }
+//                   />
+//                 </div>
+//                 <div className="user-input">
+//                   <input
+//                     type="number"
+//                     placeholder={`Amount (₹)`}
+//                     value={user.amount}
+//                     onChange={(e) =>
+//                       handleUserInputChange(index, "amount", e.target.value)
+//                     }
+//                   />
+//                 </div>
+//               </div>
+//             ))}
+//             <button className="add-users-button" onClick={handleAddUserClick}>
+//               Add Users
+//             </button>
+//             <button onClick={scanPrevStepHandler}>Previous</button>
+//             <button onClick={scanNextStepHandler}>Next</button>
+//           </div>
+//         );
+//       case 5:
+//         return (
+//           <div>
+//             <p>Total Amount Needed to be Paid (₹): ₹{totalAmount.toFixed(2)}</p>
+//             <p>
+//               Total Amount Entered by Users (₹): ₹{totalUserAmount.toFixed(2)}
+//             </p>
+//             <p>
+//               Amount Remaining (₹): ₹
+//               {(totalAmount - totalUserAmount).toFixed(2)}
+//             </p>
+//             <button className="pay-money-button" onClick={handlePayMoneyClick}>
+//               Send Requests
+//             </button>
+//             <button onClick={scanPrevStepHandler}>Previous</button>
+//           </div>
+//         );
+//       default:
+//         return null;
+//     }
+//   };
 
-  const handleScanAndPayClick = () => {
-    setShowScanner(true);
-    setShowPayByPhoneNumber(false);
-    setSelectedContact(null);
-    setTotalAmount(0);
-    setUsers([]);
+//   const handleScanAndPayClick = () => {
+//     setShowScanner(true);
+//     setShowPayByPhoneNumber(false);
+//     setSelectedContact(null);
+//     setTotalAmount(0);
+//     setUsers([]);
 
-    // Add this to hide the Group32.png image when the button is clicked
-    setShowGroupImage(false);
-  };
+//     // Add this to hide the Group32.png image when the button is clicked
+//     setShowGroupImage(false);
+//   };
 
-  const handlePayByPhoneNumberClick = () => {
-    setShowScanner(false);
-    setShowPayByPhoneNumber(true);
-    setSelectedContact(null);
-    setTotalAmount(0);
-    setUsers([]);
-    setPhoneNumberToPay("");
-    setNumUsersPooling(0);
-    setTotalUserAmount(0);
-    setShowGroupImage(false);
-  };
+//   const handlePayByPhoneNumberClick = () => {
+//     setShowScanner(false);
+//     setShowPayByPhoneNumber(true);
+//     setSelectedContact(null);
+//     setTotalAmount(0);
+//     setUsers([]);
+//     setPhoneNumberToPay("");
+//     setNumUsersPooling(0);
+//     setTotalUserAmount(0);
+//     setShowGroupImage(false);
+//   };
 
-  const handlePayMoneyClick = () => {
-    // Check if the total amount and totalUserAmount match before proceeding with payment
-    if (totalAmount === totalUserAmount) {
-      console.log(users);
-      // you can display a confirmation message
-      setLoading(true);
-      socketRef.current.emit("paymentConfirmation", users);
-      console.log("payment confirmation sent");
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-      const requestData = {
-        numbers: users.map((user) => user.phoneNumber),
-        message:
-          "Hey, Your friend is waiting for your payment,Open PoolPay and checkout the notification ",
-      };
-      console.log(requestData);
-      // Make an API call to send the messages using Axios
-      axios
-        .post("http://localhost:4000/send-messages", requestData)
-        .then((response) => {
-          // setLoading(false); // Hide the loading spinner
-          const data = response.data;
-=======
->>>>>>> Stashed changes
-      const messageTemplate = "Your friend is waiting for your payment, Open PoolPay and checkout the notification";
+//   const handlePayMoneyClick = () => {
+//     // Check if the total amount and totalUserAmount match before proceeding with payment
+//     if (totalAmount === totalUserAmount) {
+//       console.log(users);
+//       // you can display a confirmation message
+//       setLoading(true);
+//       socketRef.current.emit("paymentConfirmation", users);
+//       console.log("payment confirmation sent");
+// <<<<<<< Updated upstream
+// =======
+// <<<<<<< HEAD
+//       const requestData = {
+//         numbers: users.map((user) => user.phoneNumber),
+//         message:
+//           "Hey, Your friend is waiting for your payment,Open PoolPay and checkout the notification ",
+//       };
+//       console.log(requestData);
+//       // Make an API call to send the messages using Axios
+//       axios
+//         .post("http://localhost:4000/send-messages", requestData)
+//         .then((response) => {
+//           // setLoading(false); // Hide the loading spinner
+//           const data = response.data;
+// =======
+// >>>>>>> Stashed changes
+//       const messageTemplate = "Your friend is waiting for your payment, Open PoolPay and checkout the notification";
 
-// Extract phone numbers from the users array
-const phoneNumbers = users.map(user => user.phoneNumber);
+// // Extract phone numbers from the users array
+// const phoneNumbers = users.map(user => user.phoneNumber);
 
-// Modify the message based on the user's name and amount
-const modifiedMessage = users.map(user => {
-    const { name, amount } = user;
-    const personalizedMessage = `Hey ${name}, you owe ₹${amount} on PoolPay. ${messageTemplate}`;
-    return personalizedMessage;
-});
+// // Modify the message based on the user's name and amount
+// const modifiedMessage = users.map(user => {
+//     const { name, amount } = user;
+//     const personalizedMessage = `Hey ${name}, you owe ₹${amount} on PoolPay. ${messageTemplate}`;
+//     return personalizedMessage;
+// });
 
-const messageObject = {
-    numbers: phoneNumbers,
-    message: modifiedMessage.join('\n') // Join messages with line breaks
-};
-    console.log(messageObject);
-    // Make an API call to send the messages using Axios
-    axios.post('https://poolpayapi.onrender.com/send-messages', messageObject)
-        .then(response => {
-            // setLoading(false); // Hide the loading spinner
-            const data = response.data;
-<<<<<<< Updated upstream
-=======
->>>>>>> a0154510943a01befb7dfd1e1eb39162c93f27ca
->>>>>>> Stashed changes
-        })
-        .catch(error => {
-            setLoading(false); // Hide the loading spinner
-            console.error('Error sending messages:', error);
-            alert("Failed to send messages");
-        });
-      socketRef.current.on("Accepted",(event)=>{
-        setLoading(false);
-        alert("Payment Successful!");
-      })
-      socketRef.current.on("Declined",(event)=>{
-        setLoading(false);
-        alert(event.status);
-      })
-     
-    } else {
-      alert(
-        "Please ensure the total amount and user amounts match before proceeding with payment."
-      );
-    }
-  };
+// const messageObject = {
+//     numbers: phoneNumbers,
+//     message: modifiedMessage.join('\n') // Join messages with line breaks
+// };
+//     console.log(messageObject);
+//     // Make an API call to send the messages using Axios
+//     axios.post('https://poolpayapi.onrender.com/send-messages', messageObject)
+//         .then(response => {
+//             // setLoading(false); // Hide the loading spinner
+//             const data = response.data;
+// <<<<<<< Updated upstream
+// =======
+// >>>>>>> a0154510943a01befb7dfd1e1eb39162c93f27ca
+// >>>>>>> Stashed changes
+//         })
+//         .catch(error => {
+//             setLoading(false); // Hide the loading spinner
+//             console.error('Error sending messages:', error);
+//             alert("Failed to send messages");
+//         });
+//       socketRef.current.on("Accepted",(event)=>{
+//         setLoading(false);
+//         alert("Payment Successful!");
+//       })
+//       socketRef.current.on("Declined",(event)=>{
+//         setLoading(false);
+//         alert(event.status);
+//       })
 
-  const handleAddUserClick = () => {
-    if (numUsersPooling > 0) {
-      setUsers(
-        Array.from({ length: numUsersPooling }, () => ({
-          name: "",
-          phoneNumber: "",
-          amount: "0",
-        }))
-      ); // Initialize amount as "0"
-    }
-  };
+//     } else {
+//       alert(
+//         "Please ensure the total amount and user amounts match before proceeding with payment."
+//       );
+//     }
+//   };
 
-  const handlePhoneNumberInputChange = (e) => {
-    const newPhoneNumber = e.target.value;
-    const isValid = validatePhoneNumber(newPhoneNumber);
-    setPhoneNumberToPay(newPhoneNumber); // Update the phone number state
-    setIsPhoneNumberValid(isValid);
-  };
+//   const handleAddUserClick = () => {
+//     if (numUsersPooling > 0) {
+//       setUsers(
+//         Array.from({ length: numUsersPooling }, () => ({
+//           name: "",
+//           phoneNumber: "",
+//           amount: "0",
+//         }))
+//       ); // Initialize amount as "0"
+//     }
+//   };
 
-  const handleTotalAmountInputChange = (e) => {
-    setTotalAmount(parseFloat(e.target.value));
-  };
+//   const handlePhoneNumberInputChange = (e) => {
+//     const newPhoneNumber = e.target.value;
+//     const isValid = validatePhoneNumber(newPhoneNumber);
+//     setPhoneNumberToPay(newPhoneNumber); // Update the phone number state
+//     setIsPhoneNumberValid(isValid);
+//   };
 
-  const handleNumUsersPoolingChange = (e) => {
-    const numUsers = parseInt(e.target.value);
-    setNumUsersPooling(numUsers);
+//   const handleTotalAmountInputChange = (e) => {
+//     setTotalAmount(parseFloat(e.target.value));
+//   };
 
-    // Clear the existing user data when the number of users changes
-    setUsers([]);
-    setTotalUserAmount(0);
-  };
+//   const handleNumUsersPoolingChange = (e) => {
+//     const numUsers = parseInt(e.target.value);
+//     setNumUsersPooling(numUsers);
 
-  const handleUserInputChange = (index, field, value) => {
-    // Update the user object with the new value at the specified index
-    const updatedUsers = [...users];
-    updatedUsers[index][field] = value;
-    setUsers(updatedUsers);
-  };
+//     // Clear the existing user data when the number of users changes
+//     setUsers([]);
+//     setTotalUserAmount(0);
+//   };
 
-  const handleKevinClick = ({ phoneNumber }) => {
-    setSelectedContact({ phoneNumber: phoneNumber });
-    setShowPayByPhoneNumber(true); // Assuming you want to proceed with payment after selecting Kevin
-  };
+//   const handleUserInputChange = (index, field, value) => {
+//     // Update the user object with the new value at the specified index
+//     const updatedUsers = [...users];
+//     updatedUsers[index][field] = value;
+//     setUsers(updatedUsers);
+//   };
 
-  return (
-    <div className="co-spend-container">
-      {/* Left Side */}
-      <div className="co-spend-buttons">
-        <button className="co-spend-button" onClick={handleScanAndPayClick}>
-          <div>
-            <img src="./images/Qr code.svg" />
-          </div>{" "}
-          Scan & Pay
-        </button>
+//   const handleKevinClick = ({ phoneNumber }) => {
+//     setSelectedContact({ phoneNumber: phoneNumber });
+//     setShowPayByPhoneNumber(true); // Assuming you want to proceed with payment after selecting Kevin
+//   };
 
-        <button
-          className="co-spend-button"
-          onClick={handlePayByPhoneNumberClick}
-        >
-          <div>
-            <img src="./images/Vector.svg" />
-          </div>{" "}
-          Pay by Phone Number
-        </button>
-      </div>
+//   return (
+//     <div className="co-spend-container">
+//       {/* Left Side */}
+//       <div className="co-spend-buttons">
+//         <button className="co-spend-button" onClick={handleScanAndPayClick}>
+//           <div>
+//             <img src="./images/Qr code.svg" />
+//           </div>{" "}
+//           Scan & Pay
+//         </button>
 
-      {/* Right Side */}
-      <div className="co-spend-welcome">
-        {showGroupImage && ( // Conditionally render the Group32.png image
-          <img src="./images/Group32.png" alt="Group Image" />
-        )}
-        {showScanner ? (
-          currentScanStep === 0 ? (
-            <div className="scanner">
-              <Html5QrcodePlugin
-                fps={10}
-                qrbox={250}
-                disableFlip={false}
-                qrCodeSuccessCallback={onNewScanResult}
-              />
+//         <button
+//           className="co-spend-button"
+//           onClick={handlePayByPhoneNumberClick}
+//         >
+//           <div>
+//             <img src="./images/Vector.svg" />
+//           </div>{" "}
+//           Pay by Phone Number
+//         </button>
+//       </div>
 
-              {decodedResults && (
-                <button onClick={() => scanNextStepHandler()}>Next</button>
-              )}
+//       {/* Right Side */}
+//       <div className="co-spend-welcome">
+//         {showGroupImage && ( // Conditionally render the Group32.png image
+//           <img src="./images/Group32.png" alt="Group Image" />
+//         )}
+//         {showScanner ? (
+//           currentScanStep === 0 ? (
+//             <div className="scanner">
+//               <Html5QrcodePlugin
+//                 fps={10}
+//                 qrbox={250}
+//                 disableFlip={false}
+//                 qrCodeSuccessCallback={onNewScanResult}
+//               />
 
-              {/* <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => handleUploadQRCode(e.target.files[0])}
-              /> */}
-              {uploadedQRCodeImage ? (
-                <>
-                  <img src={uploadedQRCodeImage} alt="Uploaded QR Code" />
-                  <button onClick={handleScanQRCode}>Scan QR Code</button>
-                  {scannedPhoneNumber && (
-                    <div>
-                      <label>Scanned Phone Number:</label>
-                      <input type="text" value={scannedPhoneNumber} readOnly />
-                    </div>
-                  )}
-                </>
-              ) : (
-                <>
-                  <p>Scan or Upload a QR code image to scan</p>
-                </>
-              )}
-            </div>
-          ) : (
-            <>{renderPayByScanStep()}</>
-          )
-        ) : showPayByPhoneNumber ? (
-          <div className="pay-by-phone">{renderPayByPhoneStep()}</div>
-        ) : null}
-      </div>
-      {loading && (
-      <div className="overlay">
-        <div className="loader-container">
-          <div className="loader"></div>
-        </div>
-      </div>
-    )}
-    </div>
-  );
-};
+//               {decodedResults && (
+//                 <button onClick={() => scanNextStepHandler()}>Next</button>
+//               )}
 
-export default CoSpendPage;
+//               {/* <input
+//                 type="file"
+//                 accept="image/*"
+//                 onChange={(e) => handleUploadQRCode(e.target.files[0])}
+//               /> */}
+//               {uploadedQRCodeImage ? (
+//                 <>
+//                   <img src={uploadedQRCodeImage} alt="Uploaded QR Code" />
+//                   <button onClick={handleScanQRCode}>Scan QR Code</button>
+//                   {scannedPhoneNumber && (
+//                     <div>
+//                       <label>Scanned Phone Number:</label>
+//                       <input type="text" value={scannedPhoneNumber} readOnly />
+//                     </div>
+//                   )}
+//                 </>
+//               ) : (
+//                 <>
+//                   <p>Scan or Upload a QR code image to scan</p>
+//                 </>
+//               )}
+//             </div>
+//           ) : (
+//             <>{renderPayByScanStep()}</>
+//           )
+//         ) : showPayByPhoneNumber ? (
+//           <div className="pay-by-phone">{renderPayByPhoneStep()}</div>
+//         ) : null}
+//       </div>
+//       {loading && (
+//       <div className="overlay">
+//         <div className="loader-container">
+//           <div className="loader"></div>
+//         </div>
+//       </div>
+//     )}
+//     </div>
+//   );
+// };
+
+// export default CoSpendPage;
